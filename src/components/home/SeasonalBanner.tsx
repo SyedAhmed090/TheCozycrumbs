@@ -1,8 +1,21 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import type { SeasonalCollection } from '@/types'
 
-export default function SeasonalBanner() {
+interface SeasonalBannerProps {
+  collection?: SeasonalCollection | null
+}
+
+export default function SeasonalBanner({ collection }: SeasonalBannerProps) {
+  // Use live collection data if available; fall back to default Eid content
+  const title = collection?.title ?? 'The Eid Collection\nis Here'
+  const subtitle = collection?.subtitle ?? 'Limited Edition'
+  const description =
+    collection?.description ??
+    'Celebrate the season with our hand-crafted Eid specials — exclusively available for a limited time.'
+  const ctaLabel = collection?.cta_label ?? 'Shop the Collection'
+
   return (
     <section className="bg-chocolate py-20 px-20">
       <div className="rounded-[28px] overflow-hidden relative bg-gradient-to-br from-[#6B3A2A] to-[#4A2818]">
@@ -17,21 +30,27 @@ export default function SeasonalBanner() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-5">
-              Limited Edition
+              {subtitle}
             </p>
 
-            <h2 className="font-fraunces text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
-              The <em className="italic text-caramel">Eid</em> Collection
-              <br />
-              is Here
-            </h2>
+            {collection ? (
+              <h2 className="font-fraunces text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
+                {title}
+              </h2>
+            ) : (
+              <h2 className="font-fraunces text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
+                The <em className="italic text-caramel">Eid</em> Collection
+                <br />
+                is Here
+              </h2>
+            )}
 
             <p className="text-base text-white/60 leading-[1.7] mb-8">
-              Celebrate the season with our hand-crafted Eid specials — exclusively available for a limited time.
+              {description}
             </p>
 
             <button className="bg-caramel text-white rounded-full px-9 py-4 font-semibold text-sm hover:bg-caramel-dark transition-all hover:-translate-y-0.5">
-              Shop the Collection
+              {ctaLabel}
             </button>
           </motion.div>
 
@@ -43,7 +62,7 @@ export default function SeasonalBanner() {
             className="h-[340px] rounded-2xl flex items-center justify-center border border-caramel/[.18] bg-gradient-to-br from-caramel/[.18] to-terracotta/[.18]"
           >
             <span className="font-fraunces italic text-caramel/[.45] text-[15px]">
-              Eid Collection Preview
+              {collection?.title ?? 'Eid Collection Preview'}
             </span>
           </motion.div>
         </div>

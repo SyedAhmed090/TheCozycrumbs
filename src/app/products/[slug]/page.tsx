@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { DUMMY_PRODUCTS } from '@/lib/data/products'
 import ProductDetail from '@/components/product/ProductDetail'
+import { getProductBySlug, getProducts, getProductsByCategory } from '@/lib/supabase/queries'
 
 export default async function ProductPage({
   params,
@@ -8,15 +8,18 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const product = DUMMY_PRODUCTS.find((p) => p.slug === slug)
+  const product = await getProductBySlug(slug)
 
   if (!product) {
     notFound()
   }
 
-  return <ProductDetail product={product} />
+  const relatedProducts = await getProductsByCategory(product.category, slug, 4)
+
+  return <ProductDetail product={product} relatedProducts={relatedProducts} />
 }
 
 export async function generateStaticParams() {
-  return DUMMY_PRODUCTS.map((p) => ({ slug: p.slug }))
+  const products = await getProducts()
+  return products.map((p) => ({ slug: p.slug }))
 }

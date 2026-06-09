@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight, ShoppingBag, Clock, MapPin, CreditCard } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
-import { DUMMY_PRODUCTS } from '@/lib/data/products'
 import RelatedProducts from './RelatedProducts'
 import type { Product, ProductVariant } from '@/types'
 
@@ -73,9 +72,10 @@ function VariantSelector({ label, options, selected, onSelect }: VariantSelector
 
 interface ProductDetailProps {
   product: Product
+  relatedProducts?: Product[]
 }
 
-export default function ProductDetail({ product }: ProductDetailProps) {
+export default function ProductDetail({ product, relatedProducts = [] }: ProductDetailProps) {
   const { addItem, openDrawer } = useCartStore()
 
   const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS.cookies
@@ -93,10 +93,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [date,     setDate]     = useState('')
   const [quantity, setQuantity] = useState(1)
   const [error,    setError]    = useState('')
-
-  const relatedProducts = DUMMY_PRODUCTS
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4)
 
   function handleAddToCart() {
     if (showFlavor && !flavor) {
