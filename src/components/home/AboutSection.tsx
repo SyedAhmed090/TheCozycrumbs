@@ -14,14 +14,12 @@ function fadeUp(delay = 0) {
 export default function AboutSection() {
   return (
     <section className="bg-beige">
-      <div className="grid grid-cols-2 gap-20 items-center py-24 px-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
         <motion.div
           {...fadeUp(0)}
-          className="h-[560px] rounded-[28px] bg-gradient-to-br from-[#D4A07A] to-[#C08A65] flex items-center justify-center border border-edge"
+          className="h-[300px] sm:h-[420px] lg:h-[560px] rounded-[28px] bg-gradient-to-br from-[#D4A07A] to-[#C08A65] flex items-center justify-center border border-edge"
         >
-          <span className="font-fraunces italic text-white/30 text-[15px]">
-            Portrait — Tooba Arsal
-          </span>
+          <span className="font-fraunces italic text-white/30 text-[15px]">Portrait — Tooba Arsal</span>
         </motion.div>
 
         <div className="flex flex-col">
@@ -31,7 +29,7 @@ export default function AboutSection() {
 
           <motion.h2
             {...fadeUp(0.1)}
-            className="font-fraunces text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1] mb-6"
+            className="font-fraunces text-[28px] sm:text-[36px] lg:text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1] mb-6"
           >
             Homemade From The Heart
           </motion.h2>

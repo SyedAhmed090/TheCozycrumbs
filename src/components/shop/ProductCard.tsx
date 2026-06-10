@@ -3,25 +3,33 @@
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Product } from '@/types'
+import { useCartStore } from '@/store/cartStore'
 
 const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: boolean }> = {
-  cookies:    { from: '#E8C4A4', to: '#D4A07A', light: false },
-  brownies:   { from: '#6B3A2A', to: '#4A2818', light: true },
-  cakes:      { from: '#F0D4B8', to: '#E0BF9A', light: false },
-  cupcakes:   { from: '#D97A52', to: '#BF6038', light: true },
-  breads:     { from: '#C49060', to: '#A87840', light: true },
-  pastries:   { from: '#DCBCA0', to: '#C8A480', light: false },
+  cookies:      { from: '#E8C4A4', to: '#D4A07A', light: false },
+  brownies:     { from: '#6B3A2A', to: '#4A2818', light: true },
+  cakes:        { from: '#F0D4B8', to: '#E0BF9A', light: false },
+  cupcakes:     { from: '#D97A52', to: '#BF6038', light: true },
+  breads:       { from: '#C49060', to: '#A87840', light: true },
+  pastries:     { from: '#DCBCA0', to: '#C8A480', light: false },
   'gift-boxes': { from: '#C89B6D', to: '#B08958', light: false },
 }
 
 export default function ProductCard({ product }: { product: Product }) {
   const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS['cakes']
+  const { addItem, openDrawer } = useCartStore()
+
+  function handleQuickAdd(e: React.MouseEvent) {
+    e.preventDefault()
+    addItem({ product, quantity: 1, variant: {}, price: product.base_price })
+    openDrawer()
+  }
 
   return (
     <Link href={`/products/${product.slug}`} className="block">
       <article className="bg-white rounded-2xl overflow-hidden border border-edge group cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(90,62,43,0.11)] transition-all duration-300 relative">
         <div
-          className="h-[200px] overflow-hidden"
+          className="h-[160px] sm:h-[200px] overflow-hidden"
           style={{ background: `linear-gradient(135deg, ${gradient.from}, ${gradient.to})` }}
         >
           <div className="w-full h-full group-hover:scale-[1.05] transition-transform duration-400 flex items-center justify-center">
@@ -34,29 +42,29 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="p-4 sm:p-5">
           <p className="text-[10px] font-semibold tracking-[1.5px] uppercase text-caramel mb-1">
             {product.category.replace('-', ' ')}
           </p>
-          <h3 className="font-fraunces text-lg font-normal text-ink mb-1.5 leading-tight">
+          <h3 className="font-fraunces text-base sm:text-lg font-normal text-ink mb-1.5 leading-tight">
             {product.name}
           </h3>
-          <p className="text-[13px] text-muted leading-[1.5] mb-4 line-clamp-2">
+          <p className="text-[12px] sm:text-[13px] text-muted leading-[1.5] mb-4 line-clamp-2">
             {product.description}
           </p>
           <div className="flex items-center justify-between">
-            <span className="font-fraunces text-lg text-chocolate">
+            <span className="font-fraunces text-base sm:text-lg text-chocolate">
               {product.base_price ? `PKR ${product.base_price.toLocaleString()}` : 'PKR —'}
             </span>
-            <span className="text-xs text-caramel font-medium hover:text-chocolate transition-colors">
+            <span className="text-xs text-caramel font-medium hover:text-chocolate transition-colors hidden sm:block">
               View Details
             </span>
           </div>
         </div>
 
         <button
-          onClick={(e) => e.preventDefault()}
-          className="absolute bottom-5 right-5 w-9 h-9 rounded-full bg-chocolate flex items-center justify-center text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+          onClick={handleQuickAdd}
+          className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 w-9 h-9 rounded-full bg-chocolate flex items-center justify-center text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
           aria-label={`Quick add ${product.name}`}
         >
           <Plus size={15} strokeWidth={2.5} />

@@ -48,7 +48,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
       </motion.div>
 
       {/* Heading */}
-      <h1 className="font-fraunces text-[48px] font-normal text-chocolate tracking-[-1.2px] mt-8 mb-4">
+      <h1 className="font-fraunces text-[36px] sm:text-[48px] font-normal text-chocolate tracking-[-1.2px] mt-8 mb-4">
         Order Placed!
       </h1>
 
@@ -92,7 +92,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         <Link
           href="/"
           className="px-7 py-3 rounded-full border border-edge text-sm font-semibold text-ink hover:bg-cream transition-colors"

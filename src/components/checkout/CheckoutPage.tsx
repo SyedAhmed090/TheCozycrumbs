@@ -61,7 +61,9 @@ export default function CheckoutPage() {
   function validate(): boolean {
     const newErrors: FormErrors = {}
     if (!customerName.trim()) newErrors.customerName = 'Full name is required'
-    if (!customerPhone.trim()) newErrors.customerPhone = 'Phone number is required'
+    const phone = customerPhone.trim().replace(/\s/g, '')
+    if (!phone) newErrors.customerPhone = 'Phone number is required'
+    else if (!/^(\+92|0)3\d{9}$/.test(phone)) newErrors.customerPhone = 'Enter a valid Pakistani mobile number (e.g. 03XX XXXXXXX)'
     if (!customerAddress.trim()) newErrors.customerAddress = 'Delivery address is required'
     if (!deliveryDate) newErrors.deliveryDate = 'Please select a delivery date'
     setErrors(newErrors)
@@ -111,7 +113,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-ivory">
       {/* Top Bar */}
-      <div className="bg-cream border-b border-edge px-20 py-5 flex items-center justify-between">
+      <div className="bg-cream border-b border-edge px-4 sm:px-8 lg:px-20 py-5 flex items-center justify-between">
         <span className="font-fraunces text-xl text-chocolate">The Cozy Crumb</span>
         <div className="flex items-center gap-2">
           <Lock size={14} className="text-muted" />
@@ -120,7 +122,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Main Grid */}
-      <div className="max-w-[1200px] mx-auto px-20 py-14 grid grid-cols-[1fr_420px] gap-14 items-start">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-20 py-8 lg:py-14 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-14 items-start">
         {/* Left — Checkout Form */}
         <div className="flex flex-col gap-8">
           {/* Section 1 — Contact & Delivery */}

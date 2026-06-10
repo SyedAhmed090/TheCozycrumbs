@@ -10,42 +10,12 @@ type GalleryItem = {
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    gradient: 'from-[#F0D4B8] to-[#E0BF9A]',
-    label: 'Vanilla Birthday Cake',
-    textColor: 'text-chocolate/50',
-    className: 'row-span-2 h-[480px]',
-  },
-  {
-    gradient: 'from-[#6B3A2A] to-[#4A2818]',
-    label: 'Chocolate Ganache',
-    textColor: 'text-white/50',
-    className: 'h-[220px]',
-  },
-  {
-    gradient: 'from-[#D97A52] to-[#BF6038]',
-    label: 'Red Velvet Celebration',
-    textColor: 'text-white/60',
-    className: 'h-[220px]',
-  },
-  {
-    gradient: 'from-[#E8C4A4] to-[#D4A07A]',
-    label: 'Caramel Drip Cake',
-    textColor: 'text-chocolate/50',
-    className: 'h-[220px]',
-  },
-  {
-    gradient: 'from-[#F2D4B8] to-[#E4BF9A]',
-    label: 'Tiered Wedding Cake',
-    textColor: 'text-chocolate/50',
-    className: 'row-span-2 h-[480px]',
-  },
-  {
-    gradient: 'from-[#C49060] to-[#A87840]',
-    label: 'Custom Birthday',
-    textColor: 'text-white/60',
-    className: 'h-[220px]',
-  },
+  { gradient: 'from-[#F0D4B8] to-[#E0BF9A]', label: 'Vanilla Birthday Cake', textColor: 'text-chocolate/50', className: 'row-span-2 h-[480px]' },
+  { gradient: 'from-[#6B3A2A] to-[#4A2818]', label: 'Chocolate Ganache', textColor: 'text-white/50', className: 'h-[220px]' },
+  { gradient: 'from-[#D97A52] to-[#BF6038]', label: 'Red Velvet Celebration', textColor: 'text-white/60', className: 'h-[220px]' },
+  { gradient: 'from-[#E8C4A4] to-[#D4A07A]', label: 'Caramel Drip Cake', textColor: 'text-chocolate/50', className: 'h-[220px]' },
+  { gradient: 'from-[#F2D4B8] to-[#E4BF9A]', label: 'Tiered Wedding Cake', textColor: 'text-chocolate/50', className: 'row-span-2 h-[480px]' },
+  { gradient: 'from-[#C49060] to-[#A87840]', label: 'Custom Birthday', textColor: 'text-white/60', className: 'h-[220px]' },
 ]
 
 function fadeUp(delay = 0) {
@@ -59,21 +29,21 @@ function fadeUp(delay = 0) {
 
 export default function CakeGallery() {
   return (
-    <section className="bg-beige py-20 px-20">
+    <section className="bg-beige py-16 lg:py-20 px-4 sm:px-8 lg:px-20">
       <motion.div {...fadeUp(0)} className="text-center mb-12">
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-4 flex items-center justify-center gap-3">
           <span className="w-8 h-px bg-caramel" />
           Inspiration
           <span className="w-8 h-px bg-caramel" />
         </p>
-        <h2 className="font-fraunces text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
+        <h2 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
           Our Cake Gallery
         </h2>
       </motion.div>
 
       <motion.div
         {...fadeUp(0.1)}
-        className="grid grid-cols-3 gap-5"
+        className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
         style={{ gridAutoRows: 'min-content' }}
       >
         {GALLERY_ITEMS.map((item, i) => (
@@ -82,9 +52,7 @@ export default function CakeGallery() {
             className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform bg-gradient-to-br ${item.gradient} flex items-center justify-center ${item.className}`}
             style={i === 0 || i === 4 ? { gridRow: 'span 2' } : {}}
           >
-            <span className={`font-fraunces italic text-sm text-center px-4 ${item.textColor}`}>
-              {item.label}
-            </span>
+            <span className={`font-fraunces italic text-sm text-center px-4 ${item.textColor}`}>{item.label}</span>
           </div>
         ))}
       </motion.div>

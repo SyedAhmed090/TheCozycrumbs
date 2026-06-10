@@ -137,7 +137,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
   return (
     <div className="bg-ivory min-h-screen">
       {/* Breadcrumb */}
-      <nav className="px-20 pt-8 pb-0 flex items-center gap-2 text-sm text-muted">
+      <nav className="px-4 sm:px-8 lg:px-20 pt-8 pb-0 flex items-center gap-2 text-sm text-muted">
         <Link href="/" className="hover:text-chocolate transition-colors">Home</Link>
         <ChevronRight size={14} className="flex-shrink-0" />
         <Link href="/shop" className="hover:text-chocolate transition-colors">Shop</Link>
@@ -153,12 +153,12 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
       </nav>
 
       {/* Main grid */}
-      <div className="grid grid-cols-2 gap-16 px-20 py-10 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 px-4 sm:px-8 lg:px-20 py-10 items-start">
 
         {/* Left — Image area */}
         <div>
           <div
-            className="h-[520px] rounded-[28px] flex items-center justify-center"
+            className="h-[260px] sm:h-[400px] lg:h-[520px] rounded-[28px] flex items-center justify-center"
             style={{ background: `linear-gradient(135deg, ${gradient.from}, ${gradient.to})` }}
           >
             <span
@@ -186,7 +186,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
           <p className="text-[11px] font-semibold tracking-[1.5px] uppercase text-caramel mb-3">
             {categoryLabel(product.category)}
           </p>
-          <h1 className="font-fraunces text-[44px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1] mb-4">
+          <h1 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[44px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1] mb-4">
             {product.name}
           </h1>
           <div className="flex items-center gap-2">
@@ -301,7 +301,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
           )}
 
           {/* Trust badges */}
-          <div className="flex gap-6 mt-6 pt-6 border-t border-edge">
+          <div className="flex flex-wrap gap-4 sm:gap-6 mt-6 pt-6 border-t border-edge">
             <div className="flex items-center gap-2 text-xs text-muted font-medium">
               <Clock size={14} className="text-caramel flex-shrink-0" />
               Made Fresh To Order

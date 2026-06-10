@@ -1,6 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import type { CartItem } from '@/types'
 
 interface CartStore {
@@ -17,35 +18,43 @@ interface CartStore {
   totalPrice: () => number
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
-  isOpen: false,
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      isOpen: false,
 
-  addItem: (item) =>
-    set((state) => ({
-      items: [...state.items, { ...item, cartId: crypto.randomUUID() }],
-    })),
+      addItem: (item) =>
+        set((state) => ({
+          items: [...state.items, { ...item, cartId: crypto.randomUUID() }],
+        })),
 
-  removeItem: (cartId) =>
-    set((state) => ({
-      items: state.items.filter((i) => i.cartId !== cartId),
-    })),
+      removeItem: (cartId) =>
+        set((state) => ({
+          items: state.items.filter((i) => i.cartId !== cartId),
+        })),
 
-  updateQuantity: (cartId, quantity) =>
-    set((state) => ({
-      items: state.items.map((i) =>
-        i.cartId === cartId ? { ...i, quantity } : i
-      ),
-    })),
+      updateQuantity: (cartId, quantity) =>
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.cartId === cartId ? { ...i, quantity } : i
+          ),
+        })),
 
-  clearCart: () => set({ items: [] }),
-  openDrawer: () => set({ isOpen: true }),
-  closeDrawer: () => set({ isOpen: false }),
-  toggleDrawer: () => set((state) => ({ isOpen: !state.isOpen })),
+      clearCart: () => set({ items: [] }),
+      openDrawer: () => set({ isOpen: true }),
+      closeDrawer: () => set({ isOpen: false }),
+      toggleDrawer: () => set((state) => ({ isOpen: !state.isOpen })),
 
-  totalItems: () =>
-    get().items.reduce((sum, i) => sum + i.quantity, 0),
-
-  totalPrice: () =>
-    get().items.reduce((sum, i) => sum + (i.price ?? 0) * i.quantity, 0),
-}))
+      totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+      totalPrice: () =>
+        get().items.reduce((sum, i) => sum + (i.price ?? 0) * i.quantity, 0),
+    }),
+    {
+      name: 'cozy-crumb-cart',
+      storage: createJSONStorage(() => localStorage),
+      // Only persist items, not drawer open state
+      partialize: (state) => ({ items: state.items }),
+    }
+  )
+)

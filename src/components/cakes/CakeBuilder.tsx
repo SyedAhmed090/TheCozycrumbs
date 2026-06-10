@@ -141,10 +141,21 @@ export default function CakeBuilder() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setPreviewUrl(url)
+    if (!file) return
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      setValidationError('Please upload a JPG, PNG, WebP, or GIF image.')
+      e.target.value = ''
+      return
     }
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      setValidationError('Image must be under 5MB.')
+      e.target.value = ''
+      return
+    }
+    const url = URL.createObjectURL(file)
+    setPreviewUrl(url)
   }
 
   function handleAddToCart() {
@@ -172,19 +183,19 @@ export default function CakeBuilder() {
   const todayStr = getTodayStr()
 
   return (
-    <section id="cake-builder" className="bg-ivory py-20 px-20">
+    <section id="cake-builder" className="bg-ivory py-12 lg:py-20 px-4 sm:px-8 lg:px-20">
       <div className="text-center mb-14">
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-4 flex items-center justify-center gap-3">
           <span className="w-8 h-px bg-caramel" />
           Build Your Cake
           <span className="w-8 h-px bg-caramel" />
         </p>
-        <h2 className="font-fraunces text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
+        <h2 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
           Design Your Perfect Cake
         </h2>
       </div>
 
-      <div className="grid grid-cols-[1fr_380px] gap-14 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-14 items-start">
         {/* Left — Steps */}
         <div className="flex flex-col gap-4">
           {/* Step 1 — Flavor */}
@@ -194,7 +205,7 @@ export default function CakeBuilder() {
             isActive={currentStep === 1}
             onToggle={() => setCurrentStep(currentStep === 1 ? 0 : 1)}
           >
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {FLAVORS.map((f) => (
                 <button
                   key={f}
@@ -244,7 +255,7 @@ export default function CakeBuilder() {
             isActive={currentStep === 3}
             onToggle={() => setCurrentStep(currentStep === 3 ? 0 : 3)}
           >
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {SHAPES.map((s) => (
                 <button
                   key={s.label}
@@ -388,7 +399,7 @@ export default function CakeBuilder() {
         </div>
 
         {/* Right — Preview Card */}
-        <div className="sticky top-24">
+        <div className="lg:sticky lg:top-24">
           <div className="bg-white rounded-2xl border border-edge p-8">
             <div className="h-48 rounded-xl bg-gradient-to-br from-[#F0D4B8] to-[#E0BF9A] flex items-center justify-center mb-6">
               <span className="font-fraunces italic text-chocolate/40 text-sm text-center px-4">

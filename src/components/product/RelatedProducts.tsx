@@ -21,12 +21,12 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
   if (products.length === 0) return null
 
   return (
-    <section className="bg-beige py-20 px-20">
-      <h2 className="font-fraunces text-[38px] font-normal text-chocolate mb-10 tracking-[-1px]">
+    <section className="bg-beige py-16 lg:py-20 px-4 sm:px-8 lg:px-20">
+      <h2 className="font-fraunces text-[28px] sm:text-[34px] lg:text-[38px] font-normal text-chocolate mb-10 tracking-[-1px]">
         You Might Also Love
       </h2>
 
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => {
           const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS.cookies
           return (

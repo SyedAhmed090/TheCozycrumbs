@@ -44,21 +44,21 @@ const SECTIONS = [
 export default function PrivacyPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-[#F2E4D5] via-[#EDD8C2] to-[#E4C9AA] py-28 px-20 text-center">
+      <section className="bg-gradient-to-br from-[#F2E4D5] via-[#EDD8C2] to-[#E4C9AA] py-20 lg:py-28 px-4 sm:px-8 lg:px-20 text-center">
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-5 flex items-center justify-center gap-3">
           <span className="w-8 h-px bg-caramel" />
           Legal
           <span className="w-8 h-px bg-caramel" />
         </p>
-        <h1 className="font-fraunces text-[62px] font-normal text-chocolate tracking-[-1.8px] leading-[1.08] mb-6">
+        <h1 className="font-fraunces text-[36px] sm:text-[50px] lg:text-[62px] font-normal text-chocolate tracking-[-1.8px] leading-[1.08] mb-6">
           Privacy Policy
         </h1>
-        <p className="text-lg text-muted max-w-[480px] mx-auto leading-[1.7]">
+        <p className="text-base lg:text-lg text-muted max-w-[480px] mx-auto leading-[1.7]">
           Last updated: June 2026
         </p>
       </section>
 
-      <section className="bg-cream py-24 px-20">
+      <section className="bg-cream py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
         <div className="max-w-[760px] mx-auto flex flex-col gap-10">
           {SECTIONS.map((section) => (
             <div key={section.title}>

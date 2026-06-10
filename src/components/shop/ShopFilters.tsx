@@ -21,18 +21,15 @@ export default function ShopFilters() {
 
   function handleFilter(value: string) {
     const params = new URLSearchParams(searchParams.toString())
-    if (value === 'all') {
-      params.delete('category')
-    } else {
-      params.set('category', value)
-    }
+    if (value === 'all') params.delete('category')
+    else params.set('category', value)
     const query = params.toString()
     router.push(pathname + (query ? `?${query}` : ''), { scroll: false })
   }
 
   return (
-    <div className="bg-cream sticky top-[65px] z-40 border-b border-edge">
-      <div className="px-20 py-4 flex items-center gap-3 overflow-x-auto">
+    <div className="bg-cream sticky top-[57px] z-40 border-b border-edge">
+      <div className="px-4 sm:px-8 lg:px-20 py-4 flex items-center gap-3 overflow-x-auto scrollbar-none">
         {FILTERS.map((filter) => (
           <button
             key={filter.value}
