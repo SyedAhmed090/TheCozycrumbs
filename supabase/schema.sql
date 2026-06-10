@@ -19,7 +19,7 @@ create table if not exists public.products (
   category      text        not null check (
                               category in (
                                 'cookies', 'brownies', 'cakes', 'cupcakes',
-                                'breads', 'pastries', 'gift-boxes'
+                                'breads', 'pastries', 'gift-boxes', 'savory'
                               )
                             ),
   base_price    numeric,

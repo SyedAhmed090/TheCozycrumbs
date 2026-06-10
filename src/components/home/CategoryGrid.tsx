@@ -15,13 +15,11 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { name: 'Cookies', tagline: 'Freshly baked daily', gradientFrom: '#D4A574', gradientTo: '#C08055', colSpan: 2, height: 280, row: 1, href: '/shop/cookies' },
-  { name: 'Brownies', tagline: 'Rich & fudgy', gradientFrom: '#6B3A2A', gradientTo: '#4A2818', height: 260, row: 1, href: '/shop/brownies' },
-  { name: 'Cakes', tagline: 'Custom & celebration', gradientFrom: '#E8C4A4', gradientTo: '#D09A74', height: 260, row: 1, href: '/shop/cakes' },
-  { name: 'Cupcakes', tagline: 'Perfectly portioned', gradientFrom: '#F0D4B8', gradientTo: '#E0BF9A', height: 260, row: 1, href: '/shop/cupcakes' },
-  { name: 'Breads', tagline: 'Artisan & fresh', gradientFrom: '#C49060', gradientTo: '#A87840', height: 240, row: 2, href: '/shop/breads' },
-  { name: 'Pastries', tagline: 'Flaky & golden', gradientFrom: '#DCBCA0', gradientTo: '#C8A480', colSpan: 2, height: 240, row: 2, href: '/shop/pastries' },
-  { name: 'Gift Boxes', tagline: 'Curated with care', gradientFrom: '#D97A52', gradientTo: '#BF6038', height: 240, row: 2, href: '/shop/gift-boxes' },
+  { name: 'Cakes',         tagline: 'Three Milk & more',       gradientFrom: '#E8C4A4', gradientTo: '#D09A74', colSpan: 2, height: 280, row: 1, href: '/shop/cakes' },
+  { name: 'Brownies',      tagline: '5 fudgy flavours',        gradientFrom: '#6B3A2A', gradientTo: '#4A2818', height: 280, row: 1, href: '/shop/brownies' },
+  { name: 'Chicken Bakes', tagline: 'Bread & buns',            gradientFrom: '#C49060', gradientTo: '#A87840', height: 280, row: 1, href: '/shop/breads' },
+  { name: 'Nankhatai',     tagline: 'Classic & cardamom',      gradientFrom: '#D4A574', gradientTo: '#C08055', height: 240, row: 2, href: '/shop/cookies' },
+  { name: 'Savory',        tagline: 'Pasta made fresh',        gradientFrom: '#8B9B6B', gradientTo: '#6B7B4B', colSpan: 2, height: 240, row: 2, href: '/shop/savory' },
 ]
 
 const fadeUp = {

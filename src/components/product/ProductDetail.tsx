@@ -15,6 +15,7 @@ const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: bool
   breads:      { from: '#C49060', to: '#A87840', light: true  },
   pastries:    { from: '#DCBCA0', to: '#C8A480', light: false },
   'gift-boxes':{ from: '#C89B6D', to: '#B08958', light: false },
+  savory:      { from: '#8B9B6B', to: '#6B7B4B', light: true  },
 }
 
 const FLAVOR_OPTIONS   = ['Vanilla', 'Chocolate', 'Red Velvet', 'Lemon', 'Carrot', 'Strawberry']
@@ -80,10 +81,12 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
 
   const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS.cookies
   const cat = product.category
-  const showFlavor   = ['cakes', 'cupcakes', 'cookies', 'brownies', 'pastries'].includes(cat)
-  const showWeight   = Object.keys(WEIGHT_OPTIONS).includes(cat)
-  const showShape    = ['cakes', 'cupcakes'].includes(cat)
-  const showFrosting = ['cakes', 'cupcakes'].includes(cat)
+  // Variant selectors only for custom cakes — all other products have
+  // size/flavour already in their name and carry a fixed price.
+  const showFlavor   = false
+  const showWeight   = false
+  const showShape    = cat === 'cakes'
+  const showFrosting = cat === 'cakes'
 
   const [flavor,   setFlavor]   = useState('')
   const [weight,   setWeight]   = useState('')

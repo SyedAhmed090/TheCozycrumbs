@@ -11,6 +11,7 @@ const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: bool
   breads:      { from: '#C49060', to: '#A87840', light: true  },
   pastries:    { from: '#DCBCA0', to: '#C8A480', light: false },
   'gift-boxes':{ from: '#C89B6D', to: '#B08958', light: false },
+  savory:      { from: '#8B9B6B', to: '#6B7B4B', light: true  },
 }
 
 interface RelatedProductsProps {

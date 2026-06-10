@@ -6,6 +6,7 @@ export type Category =
   | 'breads'
   | 'pastries'
   | 'gift-boxes'
+  | 'savory'
 
 export type ProductVariant = {
   flavor?: string
