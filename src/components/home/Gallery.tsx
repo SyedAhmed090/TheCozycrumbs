@@ -1,16 +1,17 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const items = [
-  { gradient: 'from-[#E8C4A4] to-[#D4A07A]', label: 'Fresh from the oven', labelColor: 'text-chocolate/30', rowSpan: true, height: 374 },
-  { gradient: 'from-[#D4A574] to-[#C08055]', label: 'Signature cookies', labelColor: 'text-white/30', rowSpan: false, height: 180 },
-  { gradient: 'from-[#F0D4B8] to-[#E0BF9A]', label: 'Beautiful packaging', labelColor: 'text-chocolate/30', rowSpan: false, height: 180 },
-  { gradient: 'from-[#6B3A2A] to-[#4A2818]', label: 'Custom cakes', labelColor: 'text-white/30', rowSpan: true, height: 374 },
-  { gradient: 'from-[#C49060] to-[#A87840]', label: 'Behind the scenes', labelColor: 'text-white/30', rowSpan: false, height: 180 },
-  { gradient: 'from-[#DCBCA0] to-[#C8A480]', label: 'Pastry selection', labelColor: 'text-chocolate/30', rowSpan: false, height: 180 },
-  { gradient: 'from-[#D97A52] to-[#BF6038]', label: 'Gift boxes', labelColor: 'text-white/30', rowSpan: false, height: 180 },
-  { gradient: 'from-[#C89B6D] to-[#B08958]', label: 'Seasonal treats', labelColor: 'text-white/30', rowSpan: false, height: 180 },
+  { image: '/003.jpg', label: 'Fresh from the oven', rowSpan: true },
+  { gradient: 'from-[#D4A574] to-[#C08055]', label: 'Signature cookies', labelColor: 'text-white/30', rowSpan: false },
+  { image: '/004.jpg', label: 'Beautiful packaging', rowSpan: false },
+  { gradient: 'from-[#6B3A2A] to-[#4A2818]', label: 'Custom cakes', labelColor: 'text-white/30', rowSpan: true },
+  { image: '/005.jpg', label: 'Behind the scenes', rowSpan: false },
+  { gradient: 'from-[#DCBCA0] to-[#C8A480]', label: 'Pastry selection', labelColor: 'text-chocolate/30', rowSpan: false },
+  { gradient: 'from-[#D97A52] to-[#BF6038]', label: 'Gift boxes', labelColor: 'text-white/30', rowSpan: false },
+  { gradient: 'from-[#C89B6D] to-[#B08958]', label: 'Seasonal treats', labelColor: 'text-white/30', rowSpan: false },
 ]
 
 const containerVariants = {
@@ -45,16 +46,19 @@ export default function Gallery() {
         whileInView="visible"
         viewport={{ once: true }}
         className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mt-16"
-        style={{ gridAutoRows: 'auto' }}
+        style={{ gridAutoRows: '180px' }}
       >
         {items.map((item, i) => (
           <motion.div
             key={i}
             variants={itemVariants}
-            className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform bg-gradient-to-br ${item.gradient} flex items-center justify-center${item.rowSpan ? ' row-span-2' : ''}`}
-            style={{ height: item.height }}
+            className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform relative${'gradient' in item ? ` bg-gradient-to-br ${item.gradient} flex items-center justify-center` : ''}${item.rowSpan ? ' row-span-2' : ''}`}
           >
-            <span className={`font-fraunces italic text-[12px] ${item.labelColor}`}>{item.label}</span>
+            {'image' in item ? (
+              <Image src={item.image} alt={item.label} fill className="object-cover" />
+            ) : (
+              <span className={`font-fraunces italic text-[12px] ${item.labelColor}`}>{item.label}</span>
+            )}
           </motion.div>
         ))}
       </motion.div>

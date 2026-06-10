@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const stats = [
@@ -17,9 +18,9 @@ export default function StorySection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="h-[320px] sm:h-[420px] lg:h-[520px] rounded-[28px] overflow-hidden bg-gradient-to-br from-[#D4A07A] to-[#C08A65] flex items-center justify-center"
+          className="h-[320px] sm:h-[420px] lg:h-[520px] rounded-[28px] overflow-hidden relative"
         >
-          <span className="font-fraunces italic text-white/40 text-[15px]">Bakery Photography</span>
+          <Image src="/002.jpg" alt="Our bakery kitchen" fill className="object-cover" />
         </motion.div>
 
         <motion.div

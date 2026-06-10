@@ -8,18 +8,17 @@ interface Category {
   tagline: string
   gradientFrom: string
   gradientTo: string
-  colSpan?: number
+  colSpanClass: string
   height: number
-  row?: number
   href: string
 }
 
 const categories: Category[] = [
-  { name: 'Cakes',         tagline: 'Three Milk & more',       gradientFrom: '#E8C4A4', gradientTo: '#D09A74', colSpan: 2, height: 280, row: 1, href: '/shop/cakes' },
-  { name: 'Brownies',      tagline: '5 fudgy flavours',        gradientFrom: '#6B3A2A', gradientTo: '#4A2818', height: 280, row: 1, href: '/shop/brownies' },
-  { name: 'Chicken Bakes', tagline: 'Bread & buns',            gradientFrom: '#C49060', gradientTo: '#A87840', height: 280, row: 1, href: '/shop/breads' },
-  { name: 'Nankhatai',     tagline: 'Classic & cardamom',      gradientFrom: '#D4A574', gradientTo: '#C08055', height: 240, row: 2, href: '/shop/cookies' },
-  { name: 'Savory',        tagline: 'Pasta made fresh',        gradientFrom: '#8B9B6B', gradientTo: '#6B7B4B', colSpan: 2, height: 240, row: 2, href: '/shop/savory' },
+  { name: 'Cakes',         tagline: 'Three Milk & more',  gradientFrom: '#E8C4A4', gradientTo: '#D09A74', colSpanClass: 'col-span-2',              height: 280, href: '/shop/cakes' },
+  { name: 'Brownies',      tagline: '5 fudgy flavours',   gradientFrom: '#6B3A2A', gradientTo: '#4A2818', colSpanClass: 'col-span-1',              height: 280, href: '/shop/brownies' },
+  { name: 'Chicken Bakes', tagline: 'Bread & buns',       gradientFrom: '#C49060', gradientTo: '#A87840', colSpanClass: 'col-span-1',              height: 280, href: '/shop/breads' },
+  { name: 'Nankhatai',     tagline: 'Classic & cardamom', gradientFrom: '#D4A574', gradientTo: '#C08055', colSpanClass: 'col-span-1',              height: 240, href: '/shop/cookies' },
+  { name: 'Savory',        tagline: 'Pasta made fresh',   gradientFrom: '#8B9B6B', gradientTo: '#6B7B4B', colSpanClass: 'col-span-2 lg:col-span-3', height: 240, href: '/shop/savory' },
 ]
 
 const fadeUp = {
@@ -32,9 +31,6 @@ const fadeUp = {
 }
 
 export default function CategoryGrid() {
-  const row1 = categories.filter((c) => c.row === 1)
-  const row2 = categories.filter((c) => c.row === 2)
-
   return (
     <section className="bg-ivory py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
       <motion.div
@@ -54,21 +50,14 @@ export default function CategoryGrid() {
         </h2>
       </motion.div>
 
-      <div className="flex flex-col gap-[18px]">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[18px]">
-          {row1.map((cat, i) => <CategoryCard key={cat.name} cat={cat} index={i} />)}
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[18px]">
-          {row2.map((cat, i) => <CategoryCard key={cat.name} cat={cat} index={row1.length + i} />)}
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[18px]">
+        {categories.map((cat, i) => <CategoryCard key={cat.name} cat={cat} index={i} />)}
       </div>
     </section>
   )
 }
 
 function CategoryCard({ cat, index }: { cat: Category; index: number }) {
-  const colSpanClass = cat.colSpan === 2 ? 'col-span-2' : 'col-span-1'
-
   return (
     <Link href={cat.href}>
       <motion.div
@@ -77,7 +66,7 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
-        className={`${colSpanClass} group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300`}
+        className={`${cat.colSpanClass} group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300`}
         style={{ height: cat.height }}
       >
         <div

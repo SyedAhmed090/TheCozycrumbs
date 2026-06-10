@@ -1,15 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
-
-const bobVariants = {
-  main: { y: [0, -12, 0], transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' as const } },
-  a: { y: [0, -8, 0], transition: { duration: 3.2, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.6 } },
-  b: { y: [0, -6, 0], transition: { duration: 3.8, repeat: Infinity, ease: 'easeInOut' as const, delay: 1.2 } },
-  c: { y: [0, -5, 0], transition: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.3 } },
-  stamp: { rotate: [0, 360], transition: { duration: 14, repeat: Infinity, ease: 'linear' as const } },
-}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -98,21 +91,9 @@ export default function HeroSection() {
         </motion.ul>
       </div>
 
-      {/* Right column — hidden on mobile, shown md+ */}
-      <div className="hidden lg:block relative overflow-hidden bg-gradient-to-br from-[#F2E4D5] via-[#E8D5BE] to-[#DDC8AD]">
-        <motion.div animate={bobVariants.c} className="absolute rounded-2xl bg-gradient-to-br from-[#EDD8C0] to-[#DCBC98]" style={{ width: 95, height: 95, top: '10%', left: '14%' }} />
-        <motion.div animate={bobVariants.a} className="absolute rounded-2xl bg-gradient-to-br from-[#FAF4EE] to-[#F0E0CC]" style={{ width: 155, height: 155, top: '10%', right: '10%' }} />
-        <motion.div animate={bobVariants.main} className="absolute rounded-2xl bg-gradient-to-br from-[#E8D0B4] to-[#DCBC98] flex items-center justify-center" style={{ width: 280, height: 340, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-          <span className="font-fraunces italic text-chocolate/30 text-sm text-center px-4">Signature Basket</span>
-        </motion.div>
-        <motion.div animate={bobVariants.b} className="absolute rounded-2xl bg-gradient-to-br from-[#FFF9F4] to-[#EDD8C0]" style={{ width: 135, height: 135, bottom: '16%', left: '8%' }} />
-        <div className="absolute flex items-center justify-center" style={{ width: 90, height: 90, bottom: '9%', right: '9%' }}>
-          <div className="w-full h-full rounded-full bg-chocolate flex items-center justify-center overflow-hidden">
-            <motion.div animate={bobVariants.stamp} className="font-fraunces italic text-caramel text-[10px] text-center leading-tight px-2">
-              Made with Love ♥
-            </motion.div>
-          </div>
-        </div>
+      {/* Right column — hidden on mobile, shown lg+ */}
+      <div className="hidden lg:block relative overflow-hidden">
+        <Image src="/001.jpg" alt="Freshly baked goods from The Cozy Crumbs" fill className="object-cover" priority />
       </div>
     </section>
   )

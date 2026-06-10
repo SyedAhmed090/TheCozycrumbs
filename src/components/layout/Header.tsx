@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, User, ShoppingBag, Menu, X } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 
@@ -48,11 +49,10 @@ export default function Header() {
       >
         <div className="flex items-center justify-between px-4 sm:px-8 lg:px-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-            <span className="w-2 h-2 rounded-full bg-terracotta flex-shrink-0" />
-            <span className="font-fraunces text-lg lg:text-xl font-medium text-chocolate">
-              The Cozy Crumb
-            </span>
+          <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+            <div className="relative h-10 w-36">
+              <Image src="/logo.png" alt="The Cozy Crumbs" fill className="object-contain object-left" />
+            </div>
           </Link>
 
           {/* Desktop nav */}
