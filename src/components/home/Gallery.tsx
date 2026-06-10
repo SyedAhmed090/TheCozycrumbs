@@ -3,7 +3,10 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-const items = [
+type ImageItem    = { image: string; label: string; rowSpan: boolean }
+type GradientItem = { gradient: string; labelColor: string; label: string; rowSpan: boolean }
+
+const items: (ImageItem | GradientItem)[] = [
   { image: '/003.jpg', label: 'Fresh from the oven', rowSpan: true },
   { gradient: 'from-[#D4A574] to-[#C08055]', label: 'Signature cookies', labelColor: 'text-white/30', rowSpan: false },
   { image: '/004.jpg', label: 'Beautiful packaging', rowSpan: false },
