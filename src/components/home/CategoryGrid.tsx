@@ -59,14 +59,14 @@ export default function CategoryGrid() {
 
 function CategoryCard({ cat, index }: { cat: Category; index: number }) {
   return (
-    <Link href={cat.href}>
+    <Link href={cat.href} className={cat.colSpanClass}>
       <motion.div
         custom={index}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
-        className={`${cat.colSpanClass} group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300`}
+        className="w-full group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300"
         style={{ height: cat.height }}
       >
         <div
