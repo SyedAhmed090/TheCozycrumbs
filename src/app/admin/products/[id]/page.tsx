@@ -9,6 +9,13 @@ import DeleteProductButton from '@/components/admin/DeleteProductButton'
 
 export const metadata: Metadata = { title: 'Edit Product' }
 
+type Product = {
+  id: string; name: string; slug: string; category: string
+  description: string | null; base_price: number | null
+  stock_quantity: number | null; is_available: boolean
+  is_featured: boolean | null; images: string[]
+}
+
 export default async function EditProductPage({
   params,
   searchParams,
@@ -19,7 +26,7 @@ export default async function EditProductPage({
   const { id } = await params
   const { error: actionError } = await searchParams
 
-  let product: Record<string, unknown> | null = null
+  let product: Product | null = null
   let loadError: string | null = null
 
   try {
