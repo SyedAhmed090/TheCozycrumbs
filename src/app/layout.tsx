@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import CartDrawer from '@/components/layout/CartDrawer'
+import CookieConsent from '@/components/layout/CookieConsent'
 
 const fraunces = Fraunces({
   variable: '--font-fraunces',
@@ -58,6 +59,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CartDrawer />
+        <CookieConsent />
       </body>
     </html>
   )

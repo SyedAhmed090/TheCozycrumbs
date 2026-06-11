@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import OrderConfirmation from '@/components/checkout/OrderConfirmation'
 import { notFound } from 'next/navigation'
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   const { data: order } = await supabase
     .from('orders')
