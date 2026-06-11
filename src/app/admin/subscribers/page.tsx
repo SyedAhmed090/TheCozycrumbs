@@ -18,8 +18,13 @@ async function deleteSubscriber(id: string) {
   revalidatePath('/admin/subscribers')
 }
 
+type Subscriber = {
+  id: string; email: string; name: string | null
+  is_active: boolean; subscribed_at: string
+}
+
 export default async function AdminSubscribersPage() {
-  let list: Record<string, unknown>[] = []
+  let list: Subscriber[] = []
   try {
     const supabase = createAdminClient()
     const { data } = await supabase

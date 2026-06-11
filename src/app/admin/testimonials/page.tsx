@@ -27,8 +27,14 @@ async function deleteTestimonial(id: string) {
 
 const STARS = ['', '★', '★★', '★★★', '★★★★', '★★★★★']
 
+type Testimonial = {
+  id: string; name: string; location: string | null
+  review: string; rating: number | null
+  is_featured: boolean | null; is_pending: boolean | null; created_at: string
+}
+
 export default async function AdminTestimonialsPage() {
-  let list: Record<string, unknown>[] = []
+  let list: Testimonial[] = []
   try {
     const supabase = createAdminClient()
     const { data } = await supabase

@@ -4,8 +4,14 @@ import { createCollection, toggleCollection, deleteCollection } from './actions'
 
 export const metadata: Metadata = { title: 'Collections' }
 
+type Collection = {
+  id: string; title: string; subtitle: string | null
+  description: string | null; image: string | null
+  is_active: boolean; end_date: string | null; created_at: string
+}
+
 export default async function AdminCollectionsPage() {
-  let list: Record<string, unknown>[] = []
+  let list: Collection[] = []
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -93,22 +99,22 @@ export default async function AdminCollectionsPage() {
             </thead>
             <tbody>
               {list.map((c) => (
-                <tr key={c.id as string} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
+                <tr key={c.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      {Boolean(c.image) && (
+                      {c.image && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={c.image as string} alt="" className="w-10 h-10 rounded-lg object-cover bg-gray-100" />
+                        <img src={c.image} alt="" className="w-10 h-10 rounded-lg object-cover bg-gray-100" />
                       )}
                       <div>
-                        <p className="font-medium text-gray-900">{c.title as string}</p>
-                        {Boolean(c.subtitle) && <p className="text-xs text-gray-400">{c.subtitle as string}</p>}
-                        {Boolean(c.description) && <p className="text-xs text-gray-300 truncate max-w-[200px]">{c.description as string}</p>}
+                        <p className="font-medium text-gray-900">{c.title}</p>
+                        {c.subtitle && <p className="text-xs text-gray-400">{c.subtitle}</p>}
+                        {c.description && <p className="text-xs text-gray-300 truncate max-w-[200px]">{c.description}</p>}
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-3 text-xs text-gray-500">
-                    {c.end_date ? new Date(c.end_date as string).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                    {c.end_date ? new Date(c.end_date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
                   </td>
                   <td className="px-5 py-3">
                     <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${c.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
@@ -117,12 +123,12 @@ export default async function AdminCollectionsPage() {
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      <form action={toggleCollection.bind(null, c.id as string, c.is_active as boolean)}>
+                      <form action={toggleCollection.bind(null, c.id, c.is_active)}>
                         <button type="submit" className="text-xs text-gray-400 hover:text-gray-700 transition-colors">
                           {c.is_active ? 'Deactivate' : 'Activate'}
                         </button>
                       </form>
-                      <form action={deleteCollection.bind(null, c.id as string)}>
+                      <form action={deleteCollection.bind(null, c.id)}>
                         <button type="submit" className="text-xs text-red-400 hover:text-red-600 transition-colors">Delete</button>
                       </form>
                     </div>

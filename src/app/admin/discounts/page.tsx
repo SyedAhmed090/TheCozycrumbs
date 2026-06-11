@@ -4,8 +4,15 @@ import { createDiscount, toggleDiscount, deleteDiscount } from './actions'
 
 export const metadata: Metadata = { title: 'Discount Codes' }
 
+type DiscountCode = {
+  id: string; code: string; description: string | null
+  discount_type: string; discount_value: number
+  min_order_amount: number | null; max_uses: number | null
+  used_count: number; is_active: boolean; expires_at: string | null
+}
+
 export default async function AdminDiscountsPage() {
-  let list: Record<string, unknown>[] = []
+  let list: DiscountCode[] = []
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
