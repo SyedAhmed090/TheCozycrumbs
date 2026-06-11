@@ -20,7 +20,10 @@ export async function POST(req: NextRequest) {
     }
 
     const ext = file.name.split('.').pop() ?? 'jpg'
-    const filename = `${crypto.randomUUID()}.${ext}`
+    const folder = (formData.get('folder') as string | null)?.trim()
+    const filename = folder
+      ? `${folder}/${crypto.randomUUID()}.${ext}`
+      : `${crypto.randomUUID()}.${ext}`
     const buffer = await file.arrayBuffer()
 
     const supabase = createAdminClient()
