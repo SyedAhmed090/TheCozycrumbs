@@ -102,8 +102,8 @@ export default async function AdminCollectionsPage() {
                       )}
                       <div>
                         <p className="font-medium text-gray-900">{c.title as string}</p>
-                        {c.subtitle && <p className="text-xs text-gray-400">{c.subtitle as string}</p>}
-                        {c.description && <p className="text-xs text-gray-300 truncate max-w-[200px]">{c.description as string}</p>}
+                        {Boolean(c.subtitle) && <p className="text-xs text-gray-400">{c.subtitle as string}</p>}
+                        {Boolean(c.description) && <p className="text-xs text-gray-300 truncate max-w-[200px]">{c.description as string}</p>}
                       </div>
                     </div>
                   </td>
