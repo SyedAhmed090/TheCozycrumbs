@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { createProduct, CATEGORIES } from '../actions'
+import { createProduct } from '../actions'
+import { CATEGORIES } from '@/lib/constants/products'
 import ImageUploader from '@/components/admin/ImageUploader'
 
 export const metadata: Metadata = { title: 'New Product' }

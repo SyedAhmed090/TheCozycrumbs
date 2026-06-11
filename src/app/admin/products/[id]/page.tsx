@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { updateProduct, deleteProduct, CATEGORIES } from '../actions'
+import { updateProduct, deleteProduct } from '../actions'
+import { CATEGORIES } from '@/lib/constants/products'
 import ImageUploader from '@/components/admin/ImageUploader'
 
 export const metadata: Metadata = { title: 'Edit Product' }
