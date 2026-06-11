@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp, CheckCircle2, ImagePlus } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
@@ -44,10 +44,6 @@ const MOCK_PRODUCT: Product = {
   created_at: new Date().toISOString(),
 }
 
-function getTodayStr(): string {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
 
 type StepCardProps = {
   step: number
@@ -105,7 +101,7 @@ type SummaryRowProps = {
 }
 
 function SummaryRow({ label, value }: SummaryRowProps) {
-  const hasValue = !!value
+  const hasValue = Boolean(value)
   return (
     <div className="flex items-start gap-3">
       <CheckCircle2
@@ -138,6 +134,7 @@ export default function CakeBuilder() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { addItem, openDrawer } = useCartStore()
+  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -179,8 +176,6 @@ export default function CakeBuilder() {
     })
     openDrawer()
   }
-
-  const todayStr = getTodayStr()
 
   return (
     <section id="cake-builder" className="bg-ivory py-12 lg:py-20 px-4 sm:px-8 lg:px-20">
@@ -337,7 +332,7 @@ export default function CakeBuilder() {
                     <>
                       <ImagePlus size={24} className="text-muted mx-auto mb-2" />
                       <p className="text-sm font-medium text-ink mb-1">Upload a reference image</p>
-                      <p className="text-xs text-muted">PNG, JPG up to 10MB</p>
+                      <p className="text-xs text-muted">PNG, JPG up to 5MB</p>
                     </>
                   )}
                 </div>

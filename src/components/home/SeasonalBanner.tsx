@@ -30,17 +30,11 @@ export default function SeasonalBanner({ collection }: SeasonalBannerProps) {
           >
             <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-5">{subtitle}</p>
 
-            {collection ? (
-              <h2 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
-                {title}
-              </h2>
-            ) : (
-              <h2 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
-                The <em className="italic text-caramel">Eid</em> Collection
-                <br />
-                is Here
-              </h2>
-            )}
+            <h2 className="font-fraunces text-[30px] sm:text-[38px] lg:text-[44px] font-normal text-white leading-[1.15] tracking-[-1px] mb-5">
+              {collection ? title : (
+                <>The <em className="italic text-caramel">Eid</em> Collection<br />is Here</>
+              )}
+            </h2>
 
             <p className="text-base text-white/60 leading-[1.7] mb-8">{description}</p>
 

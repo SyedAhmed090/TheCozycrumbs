@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
 import { useGiftBoxStore } from '@/store/giftBoxStore'
@@ -11,8 +12,8 @@ export default function ItemCard({ item }: { item: GiftBoxItem }) {
   const removeLast = useGiftBoxStore((s) => s.removeLastOfItem)
   const controls = useAnimation()
 
-  const count  = slots.filter((s) => s?.itemId === item.id).length
-  const isFull = slots.length > 0 && slots.every(Boolean)
+  const count  = useMemo(() => slots.filter((s) => s?.itemId === item.id).length, [slots, item.id])
+  const isFull = useMemo(() => slots.length > 0 && slots.every(Boolean), [slots])
 
   function handleAdd() {
     const added = addItem({

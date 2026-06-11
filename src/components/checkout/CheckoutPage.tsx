@@ -1,12 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Lock, ArrowRight, Loader2, CheckCircle } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { submitOrder } from '@/app/actions/orders'
 import type { PaymentMethod } from '@/types'
+
+const HONEYPOT_STYLE: React.CSSProperties = {
+  position: 'absolute',
+  left: '-9999px',
+  width: '1px',
+  height: '1px',
+  overflow: 'hidden',
+}
 
 type FormErrors = {
   customerName?: string
@@ -23,18 +31,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   breads: '#C4A882',
   pastries: '#E8C99A',
   'gift-boxes': '#4A7C59',
-}
-
-function getCategoryColor(category: string): string {
-  return CATEGORY_COLORS[category] ?? '#C89B6D'
-}
-
-function getTodayStr(): string {
-  const d = new Date()
-  const yyyy = d.getFullYear()
-  const mm = String(d.getMonth() + 1).padStart(2, '0')
-  const dd = String(d.getDate()).padStart(2, '0')
-  return `${yyyy}-${mm}-${dd}`
 }
 
 export default function CheckoutPage() {
@@ -54,7 +50,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
-  const todayStr = getTodayStr()
+  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
   const hasNullPrice = items.some((i) => i.price == null)
   const subtotal = totalPrice()
@@ -91,7 +87,7 @@ export default function CheckoutPage() {
           productName: item.product.name,
           quantity: item.quantity,
           variant: Object.fromEntries(
-            Object.entries(item.variant).filter(([, v]) => v != null) as [string, string][]
+            Object.entries(item.variant).filter((entry): entry is [string, string] => entry[1] != null)
           ),
           customMessage: item.custom_message ?? '',
           referenceImageUrl: item.reference_image_url ?? '',
@@ -282,7 +278,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Honeypot — hidden from real users, filled only by bots */}
-          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+          <div aria-hidden="true" style={HONEYPOT_STYLE}>
             <label htmlFor="website">Website</label>
             <input
               id="website"
@@ -367,7 +363,7 @@ export default function CheckoutPage() {
                       <div key={item.cartId} className="flex gap-3">
                         <div
                           className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5"
-                          style={{ backgroundColor: getCategoryColor(item.product.category) }}
+                          style={{ backgroundColor: CATEGORY_COLORS[item.product.category] ?? '#C89B6D' }}
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">

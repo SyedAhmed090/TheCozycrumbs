@@ -4,17 +4,20 @@ import { motion } from 'framer-motion'
 import { useGiftBoxStore } from '@/store/giftBoxStore'
 import type { BoxSize } from '@/types'
 
+const CARD_INITIAL = { opacity: 0, y: 24 }
+const CARD_ANIMATE = { opacity: 1, y: 0 }
+const CARD_HOVER = { y: -5, transition: { duration: 0.2 } }
+
 const OPTIONS: Array<{
   size: BoxSize
   label: string
   tagline: string
   minPrice: number
   cols: number
-  rows: number
 }> = [
-  { size: 4,  label: '4-Pack',  tagline: 'A sweet little gesture',   minPrice: 340,  cols: 2, rows: 2 },
-  { size: 6,  label: '6-Pack',  tagline: 'The classic gift box',     minPrice: 510,  cols: 3, rows: 2 },
-  { size: 12, label: '12-Pack', tagline: 'The ultimate treat spread', minPrice: 1020, cols: 4, rows: 3 },
+  { size: 4,  label: '4-Pack',  tagline: 'A sweet little gesture',   minPrice: 340,  cols: 2 },
+  { size: 6,  label: '6-Pack',  tagline: 'The classic gift box',     minPrice: 510,  cols: 3 },
+  { size: 12, label: '12-Pack', tagline: 'The ultimate treat spread', minPrice: 1020, cols: 4 },
 ]
 
 export default function BoxSizeSelector() {
@@ -40,10 +43,10 @@ export default function BoxSizeSelector() {
         {OPTIONS.map((opt, i) => (
           <motion.button
             key={opt.size}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={CARD_INITIAL}
+            animate={CARD_ANIMATE}
             transition={{ delay: i * 0.1, duration: 0.45, ease: 'easeOut' }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            whileHover={CARD_HOVER}
             onClick={() => setBoxSize(opt.size)}
             className="group flex flex-col items-center gap-6 p-8 bg-ivory rounded-2xl border border-edge hover:border-caramel hover:shadow-xl transition-all duration-300 cursor-pointer"
           >

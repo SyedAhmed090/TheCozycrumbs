@@ -21,9 +21,7 @@ export default function CartDrawer() {
   const closeDrawer = useCartStore((s) => s.closeDrawer)
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
-  const totalPrice = useCartStore((s) => s.totalPrice)
-
-  const subtotal = totalPrice()
+  const subtotal = useCartStore((s) => s.totalPrice())
 
   return (
     <AnimatePresence>
@@ -72,7 +70,10 @@ export default function CartDrawer() {
             ) : (
               <>
                 <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-4">
-                  {items.map((item) => (
+                  {items.map((item) => {
+                    const variantLine = [item.variant.flavor, item.variant.weight, item.variant.shape, item.variant.frosting]
+                      .filter(Boolean).join(' · ')
+                    return (
                     <div key={item.cartId} className="py-4 border-b border-edge last:border-0">
                       {item.is_gift_box ? (
                         /* ── Gift box item ─────────────────────────────── */
@@ -125,12 +126,8 @@ export default function CartDrawer() {
                             <p className="font-inter text-sm font-medium text-ink truncate">
                               {item.product.name}
                             </p>
-                            {(item.variant.flavor || item.variant.weight || item.variant.shape || item.variant.frosting) && (
-                              <p className="font-inter text-xs text-muted mt-0.5">
-                                {[item.variant.flavor, item.variant.weight, item.variant.shape, item.variant.frosting]
-                                  .filter(Boolean)
-                                  .join(' · ')}
-                              </p>
+                            {variantLine && (
+                              <p className="font-inter text-xs text-muted mt-0.5">{variantLine}</p>
                             )}
                             {item.custom_message && (
                               <p className="font-inter text-xs text-muted mt-0.5 italic truncate">
@@ -171,7 +168,7 @@ export default function CartDrawer() {
                         </div>
                       )}
                     </div>
-                  ))}
+                  )})}
                 </div>
 
                 <div className="px-6 py-5 border-t border-edge bg-ivory">

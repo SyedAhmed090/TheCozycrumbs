@@ -46,11 +46,10 @@ export default function CakeGallery() {
         className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
         style={{ gridAutoRows: 'min-content' }}
       >
-        {GALLERY_ITEMS.map((item, i) => (
+        {GALLERY_ITEMS.map((item) => (
           <div
             key={item.label}
             className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform bg-gradient-to-br ${item.gradient} flex items-center justify-center ${item.className}`}
-            style={i === 0 || i === 4 ? { gridRow: 'span 2' } : {}}
           >
             <span className={`font-fraunces italic text-sm text-center px-4 ${item.textColor}`}>{item.label}</span>
           </div>

@@ -1,9 +1,12 @@
 'use client'
 
+import { useCallback } from 'react'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
+
+const EMPTY_VARIANT = {}
 
 const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: boolean }> = {
   cookies:      { from: '#E8C4A4', to: '#D4A07A', light: false },
@@ -19,11 +22,11 @@ export default function ProductCard({ product }: { product: Product }) {
   const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS['cakes']
   const { addItem, openDrawer } = useCartStore()
 
-  function handleQuickAdd(e: React.MouseEvent) {
+  const handleQuickAdd = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
-    addItem({ product, quantity: 1, variant: {}, price: product.base_price })
+    addItem({ product, quantity: 1, variant: EMPTY_VARIANT, price: product.base_price })
     openDrawer()
-  }
+  }, [product, addItem, openDrawer])
 
   return (
     <Link href={`/products/${product.slug}`} className="block">
@@ -44,7 +47,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <div className="p-4 sm:p-5">
           <p className="text-[10px] font-semibold tracking-[1.5px] uppercase text-caramel mb-1">
-            {product.category.replace('-', ' ')}
+            {product.category.replaceAll('-', ' ')}
           </p>
           <h3 className="font-fraunces text-base sm:text-lg font-normal text-ink mb-1.5 leading-tight">
             {product.name}
@@ -54,7 +57,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </p>
           <div className="flex items-center justify-between">
             <span className="font-fraunces text-base sm:text-lg text-chocolate">
-              {product.base_price ? `PKR ${product.base_price.toLocaleString()}` : 'PKR —'}
+              {product.base_price != null ? `PKR ${product.base_price.toLocaleString()}` : 'PKR —'}
             </span>
             <span className="text-xs text-caramel font-medium hover:text-chocolate transition-colors hidden sm:block">
               View Details

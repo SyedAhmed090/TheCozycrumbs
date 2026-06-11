@@ -28,7 +28,7 @@ export default function BoxSummaryBar() {
   if (!boxSize) return null
 
   const filled     = slots.filter((s): s is FilledSlot => s !== null)
-  const isFull     = slots.length > 0 && slots.every(Boolean)
+  const isFull     = slots.length > 0 && filled.length === slots.length
   const totalPrice = filled.reduce((sum, s) => sum + s.unit_price, 0)
 
   function handleAddToCart() {

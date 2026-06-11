@@ -39,9 +39,8 @@ export default function Header() {
   const itemCount = totalItems()
 
   return (
-    <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
             ? 'bg-cream/97 backdrop-blur-md border-b border-edge shadow-sm py-3 lg:py-4'
             : 'bg-cream/80 backdrop-blur-sm py-4 lg:py-6'
@@ -127,7 +126,6 @@ export default function Header() {
             ))}
           </nav>
         )}
-      </header>
-    </>
+    </header>
   )
 }

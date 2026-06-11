@@ -9,7 +9,7 @@ export default function BoxSlot({ slot, index }: { slot: FilledSlot | null; inde
   const removeSlot = useGiftBoxStore((s) => s.removeSlot)
 
   return (
-    <div className="relative" style={{ aspectRatio: '1' }}>
+    <div className="relative aspect-square">
       <AnimatePresence mode="wait">
         {slot ? (
           <motion.div

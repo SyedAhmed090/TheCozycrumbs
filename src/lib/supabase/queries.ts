@@ -95,7 +95,7 @@ export async function getProductsByCategory(
         (p) =>
           p.category === category &&
           p.is_available &&
-          (excludeSlug ? p.slug !== excludeSlug : true)
+          (!excludeSlug || p.slug !== excludeSlug)
       )
       .slice(0, limit)
   }
@@ -123,7 +123,7 @@ export async function getProductsByCategory(
         (p) =>
           p.category === category &&
           p.is_available &&
-          (excludeSlug ? p.slug !== excludeSlug : true)
+          (!excludeSlug || p.slug !== excludeSlug)
       )
       .slice(0, limit)
   }

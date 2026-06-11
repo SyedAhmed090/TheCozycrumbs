@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
@@ -16,6 +17,8 @@ const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: bool
   'gift-boxes': { from: '#C89B6D', to: '#B08958', light: false },
 }
 
+const VIEWPORT_ONCE = { once: true }
+
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
@@ -28,18 +31,18 @@ const fadeUp = {
 export default function BestSellers({ products }: { products: Product[] }) {
   const { addItem, openDrawer } = useCartStore()
 
-  function handleQuickAdd(e: React.MouseEvent, product: Product) {
+  const handleQuickAdd = useCallback((e: React.MouseEvent, product: Product) => {
     e.preventDefault()
     addItem({ product, quantity: 1, variant: {}, price: product.base_price })
     openDrawer()
-  }
+  }, [addItem, openDrawer])
 
   return (
     <section className="bg-cream py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={VIEWPORT_ONCE}
         transition={{ duration: 0.6 }}
         className="text-center mb-14"
       >
@@ -56,7 +59,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product, i) => {
           const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS.cookies
-          const categoryLabel = product.category.replace('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+          const categoryLabel = product.category.replaceAll('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
           return (
             <Link href={`/products/${product.slug}`} key={product.id}>
@@ -64,7 +67,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
                 custom={i}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={VIEWPORT_ONCE}
                 variants={fadeUp}
                 className="group bg-white rounded-2xl overflow-hidden border border-edge cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(90,62,43,0.11)] transition-all duration-300 relative"
               >
@@ -81,7 +84,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
                   <p className="text-[13px] text-muted leading-[1.55] mb-5">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-fraunces text-xl text-chocolate">
-                      {product.base_price ? `PKR ${product.base_price.toLocaleString()}` : 'PKR —'}
+                      {product.base_price != null ? `PKR ${product.base_price.toLocaleString()}` : 'PKR —'}
                     </span>
                     <span className="text-[12px] text-caramel">★★★★★</span>
                   </div>

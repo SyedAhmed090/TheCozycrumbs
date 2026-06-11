@@ -23,10 +23,10 @@ export default function HowItWorks() {
   return (
     <section className="bg-cream py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={itemVariants}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.7, ease: 'easeOut' as const }}
         className="text-center"
       >
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-3">Simple Process</p>

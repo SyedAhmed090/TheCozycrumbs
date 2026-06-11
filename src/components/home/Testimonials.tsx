@@ -23,6 +23,8 @@ const testimonials = [
   },
 ]
 
+const VIEWPORT_ONCE = { once: true }
+
 const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
@@ -39,8 +41,8 @@ export default function Testimonials() {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, ease: 'easeOut' as const }}
+        viewport={VIEWPORT_ONCE}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
         className="text-center"
       >
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-3">Happy Customers</p>
@@ -53,7 +55,7 @@ export default function Testimonials() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={VIEWPORT_ONCE}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16"
       >
         {testimonials.map((t) => (

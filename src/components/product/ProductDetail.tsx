@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { ChevronRight, ShoppingBag, Clock, MapPin, CreditCard } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
@@ -18,26 +18,11 @@ const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: bool
   savory:      { from: '#8B9B6B', to: '#6B7B4B', light: true  },
 }
 
-const FLAVOR_OPTIONS   = ['Vanilla', 'Chocolate', 'Red Velvet', 'Lemon', 'Carrot', 'Strawberry']
 const SHAPE_OPTIONS    = ['Round', 'Square', 'Heart', 'Tiered']
 const FROSTING_OPTIONS = ['Cream Cheese', 'Buttercream', 'Chocolate Ganache', 'Whipped Cream', 'No Frosting']
 
-const WEIGHT_OPTIONS: Record<string, string[]> = {
-  cakes:       ['500g', '1kg', '1.5kg', '2kg'],
-  cupcakes:    ['500g', '1kg', '1.5kg', '2kg'],
-  cookies:     ['250g', '500g', '1kg'],
-  brownies:    ['250g', '500g', '1kg'],
-  pastries:    ['250g', '500g', '1kg'],
-  breads:      ['400g', '800g'],
-  'gift-boxes':['Small', 'Medium', 'Large'],
-}
-
-function getToday(): string {
-  return new Date().toISOString().split('T')[0]
-}
-
 function categoryLabel(category: string): string {
-  return category.replace('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  return category.replaceAll('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 interface VariantSelectorProps {
@@ -81,15 +66,9 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
 
   const gradient = CATEGORY_GRADIENTS[product.category] ?? CATEGORY_GRADIENTS.cookies
   const cat = product.category
-  // Variant selectors only for custom cakes — all other products have
-  // size/flavour already in their name and carry a fixed price.
-  const showFlavor   = false
-  const showWeight   = false
   const showShape    = cat === 'cakes'
   const showFrosting = cat === 'cakes'
 
-  const [flavor,   setFlavor]   = useState('')
-  const [weight,   setWeight]   = useState('')
   const [shape,    setShape]    = useState('')
   const [frosting, setFrosting] = useState('')
   const [message,  setMessage]  = useState('')
@@ -97,15 +76,9 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
   const [quantity, setQuantity] = useState(1)
   const [error,    setError]    = useState('')
 
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
+
   function handleAddToCart() {
-    if (showFlavor && !flavor) {
-      setError('Please select a flavor.')
-      return
-    }
-    if (showWeight && !weight) {
-      setError('Please select a weight.')
-      return
-    }
     if (showShape && !shape) {
       setError('Please select a shape.')
       return
@@ -122,8 +95,6 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
     setError('')
 
     const variant: ProductVariant = {}
-    if (showFlavor)   variant.flavor   = flavor
-    if (showWeight)   variant.weight   = weight
     if (showShape)    variant.shape    = shape
     if (showFrosting) variant.frosting = frosting
 
@@ -197,29 +168,13 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
             <span className="text-sm text-muted">(12 reviews)</span>
           </div>
           <p className="font-fraunces text-[28px] text-chocolate mt-3">
-            {product.base_price ? `PKR ${product.base_price.toLocaleString()}` : 'Price on request'}
+            {product.base_price != null ? `PKR ${product.base_price.toLocaleString()}` : 'Price on request'}
           </p>
           <p className="text-[16px] text-muted leading-[1.8] mt-4 mb-8 border-t border-edge pt-8">
             {product.description}
           </p>
 
           {/* Variant selectors */}
-          {showFlavor && (
-            <VariantSelector
-              label="Flavor"
-              options={FLAVOR_OPTIONS}
-              selected={flavor}
-              onSelect={setFlavor}
-            />
-          )}
-          {showWeight && (
-            <VariantSelector
-              label="Weight"
-              options={WEIGHT_OPTIONS[cat] ?? []}
-              selected={weight}
-              onSelect={setWeight}
-            />
-          )}
           {showShape && (
             <VariantSelector
               label="Shape"
@@ -260,7 +215,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
             </p>
             <input
               type="date"
-              min={getToday()}
+              min={today}
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="w-full border border-edge rounded-2xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white"

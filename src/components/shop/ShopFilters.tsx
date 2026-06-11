@@ -37,7 +37,7 @@ export default function ShopFilters() {
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap cursor-pointer transition-all ${
               active === filter.value
                 ? 'bg-chocolate text-white'
-                : 'bg-beige text-ink hover:bg-edge transition-colors'
+                : 'bg-beige text-ink hover:bg-edge'
             }`}
           >
             {filter.label}

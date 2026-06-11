@@ -13,6 +13,10 @@ const STATUS_STYLES: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-800',
 }
 
+const STATUSES = ['pending', 'confirmed', 'baking', 'out_for_delivery', 'delivered', 'cancelled']
+
+const TH_CLASS = 'px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide'
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-PK', {
     day: 'numeric',
@@ -61,8 +65,6 @@ export default async function AdminOrdersPage({
     fetchError = true
   }
 
-  const statuses = ['pending', 'confirmed', 'baking', 'out_for_delivery', 'delivered', 'cancelled']
-
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -80,7 +82,7 @@ export default async function AdminOrdersPage({
         >
           All
         </Link>
-        {statuses.map((s) => (
+        {STATUSES.map((s) => (
           <Link
             key={s}
             href={`/admin/orders?status=${s}`}
@@ -113,13 +115,13 @@ export default async function AdminOrdersPage({
             <table className="w-full font-inter text-sm">
               <thead>
                 <tr className="border-b border-gray-100 text-left">
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Order</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Customer</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Total</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Payment</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Delivery</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Status</th>
-                  <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Placed</th>
+                  <th className={TH_CLASS}>Order</th>
+                  <th className={TH_CLASS}>Customer</th>
+                  <th className={TH_CLASS}>Total</th>
+                  <th className={TH_CLASS}>Payment</th>
+                  <th className={TH_CLASS}>Delivery</th>
+                  <th className={TH_CLASS}>Status</th>
+                  <th className={TH_CLASS}>Placed</th>
                 </tr>
               </thead>
               <tbody>

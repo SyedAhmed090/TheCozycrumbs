@@ -27,10 +27,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
 
   const details = [
     { label: 'Delivery Date', value: formatDate(order.delivery_date) },
-    {
-      label: 'Payment Method',
-      value: order.payment_method === 'easypaisa' ? 'EasyPaisa' : 'Cash on Delivery',
-    },
+    { label: 'Payment Method', value: isEasypaisa ? 'EasyPaisa' : 'Cash on Delivery' },
     { label: 'Customer Name', value: order.customer_name },
     { label: 'Phone', value: order.customer_phone },
   ]

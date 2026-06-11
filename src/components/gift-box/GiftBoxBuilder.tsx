@@ -19,6 +19,12 @@ export default function GiftBoxBuilder() {
 
   const filledCount = slots.filter(Boolean).length
 
+  function tabClass(tab: MobileTab) {
+    return `flex-1 py-3.5 font-inter text-sm font-medium transition-colors ${
+      mobileTab === tab ? 'text-chocolate border-b-2 border-chocolate' : 'text-muted'
+    }`
+  }
+
   return (
     <div className="min-h-screen bg-cream pb-20">
 
@@ -76,21 +82,13 @@ export default function GiftBoxBuilder() {
             <div className="lg:hidden sticky top-0 z-20 flex bg-ivory border-b border-edge">
               <button
                 onClick={() => setMobileTab('items')}
-                className={`flex-1 py-3.5 font-inter text-sm font-medium transition-colors ${
-                  mobileTab === 'items'
-                    ? 'text-chocolate border-b-2 border-chocolate'
-                    : 'text-muted'
-                }`}
+                className={tabClass('items')}
               >
                 Choose Treats
               </button>
               <button
                 onClick={() => setMobileTab('box')}
-                className={`flex-1 py-3.5 font-inter text-sm font-medium transition-colors ${
-                  mobileTab === 'box'
-                    ? 'text-chocolate border-b-2 border-chocolate'
-                    : 'text-muted'
-                }`}
+                className={tabClass('box')}
               >
                 My Box{filledCount > 0 ? ` (${filledCount}/${boxSize})` : ''}
               </button>

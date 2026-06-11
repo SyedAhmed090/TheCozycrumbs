@@ -63,8 +63,6 @@ export default async function AdminOrderDetailPage({
     notFound()
   }
 
-  if (!order) notFound()
-
   const updateStatus = updateOrderStatus.bind(null, order.id)
 
   return (

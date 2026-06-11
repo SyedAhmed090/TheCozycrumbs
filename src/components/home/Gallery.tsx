@@ -34,7 +34,7 @@ export default function Gallery() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.7, ease: 'easeOut' as const }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
         className="text-center"
       >
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-3">Behind the Crumb</p>
@@ -53,7 +53,7 @@ export default function Gallery() {
       >
         {items.map((item, i) => (
           <motion.div
-            key={i}
+            key={item.label}
             variants={itemVariants}
             className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform relative${'gradient' in item ? ` bg-gradient-to-br ${item.gradient} flex items-center justify-center` : ''}${item.rowSpan ? ' row-span-2' : ''}`}
           >
