@@ -21,6 +21,7 @@ import Testimonials from '@/components/home/Testimonials'
 import Gallery from '@/components/home/Gallery'
 import AboutSection from '@/components/home/AboutSection'
 import Newsletter from '@/components/home/Newsletter'
+import InstagramGrid from '@/components/home/InstagramGrid'
 import { getFeaturedProducts, getActiveSeasonalCollection } from '@/lib/supabase/queries'
 
 export default async function HomePage() {
@@ -42,6 +43,7 @@ export default async function HomePage() {
       <Gallery />
       <AboutSection />
       <Newsletter />
+      <InstagramGrid />
     </>
   )
 }
