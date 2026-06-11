@@ -42,8 +42,6 @@ export default async function EditProductPage({
     loadError = e instanceof Error ? e.message : 'Could not load product'
   }
 
-  if (!product && !loadError) notFound()
-
   if (loadError) {
     return (
       <div>
@@ -58,6 +56,8 @@ export default async function EditProductPage({
       </div>
     )
   }
+
+  if (!product) notFound()
 
   const updateAction = updateProduct.bind(null, id)
   const deleteAction = deleteProduct.bind(null, id)
@@ -197,7 +197,7 @@ export default async function EditProductPage({
         <p className="text-xs text-red-500 mb-3">
           This permanently removes the product from the website. Existing orders that included this product will keep the name but lose the link.
         </p>
-        <DeleteProductButton productName={product.name as string} action={deleteAction} />
+        <DeleteProductButton productName={product.name} action={deleteAction} />
       </div>
     </div>
   )
