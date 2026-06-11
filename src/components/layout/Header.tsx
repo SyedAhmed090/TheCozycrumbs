@@ -43,16 +43,21 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-cream/95 backdrop-blur-sm border-b border-edge shadow-sm py-3 lg:py-4'
-            : 'py-4 lg:py-6'
+            ? 'bg-cream/97 backdrop-blur-md border-b border-edge shadow-sm py-3 lg:py-4'
+            : 'bg-cream/80 backdrop-blur-sm py-4 lg:py-6'
         }`}
       >
         <div className="flex items-center justify-between px-4 sm:px-8 lg:px-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
-            <div className="relative h-10 w-36">
-              <Image src="/logo.png" alt="The Cozy Crumbs" fill className="object-contain object-left" />
-            </div>
+          {/* Logo — intrinsic sizing so it never overflows on mobile */}
+          <Link href="/" className="flex-shrink-0 flex items-center" onClick={() => setMobileOpen(false)}>
+            <Image
+              src="/logo.png"
+              alt="The Cozy Crumbs"
+              width={144}
+              height={40}
+              className="h-8 sm:h-9 lg:h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -69,10 +74,11 @@ export default function Header() {
           </nav>
 
           {/* Right icons */}
-          <div className="flex items-center gap-1">
+          <div className="flex-shrink-0 flex items-center gap-0.5 sm:gap-1">
+            {/* Search — hidden on small mobile to prevent crowding */}
             <button
               aria-label="Search"
-              className="w-[38px] h-[38px] flex items-center justify-center rounded-full hover:bg-beige transition-colors"
+              className="hidden sm:flex w-[38px] h-[38px] items-center justify-center rounded-full hover:bg-beige transition-colors"
             >
               <Search size={17} className="text-ink" />
             </button>
@@ -99,7 +105,7 @@ export default function Header() {
             <button
               onClick={() => setMobileOpen((o) => !o)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              className="lg:hidden w-[38px] h-[38px] flex items-center justify-center rounded-full hover:bg-beige transition-colors ml-1"
+              className="lg:hidden w-[38px] h-[38px] flex items-center justify-center rounded-full hover:bg-beige transition-colors ml-0.5"
             >
               {mobileOpen ? <X size={18} className="text-ink" /> : <Menu size={18} className="text-ink" />}
             </button>
