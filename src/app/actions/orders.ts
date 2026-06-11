@@ -95,7 +95,7 @@ export async function submitOrder(
     variant: item.variant,
   }))
 
-  Promise.allSettled([
+  await Promise.allSettled([
     input.customerEmail
       ? sendOrderConfirmation({
           id: order.id,
