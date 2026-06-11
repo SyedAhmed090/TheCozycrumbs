@@ -28,13 +28,15 @@ async function deleteTestimonial(id: string) {
 const STARS = ['', '★', '★★', '★★★', '★★★★', '★★★★★']
 
 export default async function AdminTestimonialsPage() {
-  const supabase = createAdminClient()
-  const { data: testimonials } = await supabase
-    .from('testimonials')
-    .select('id, name, location, review, rating, is_featured, is_pending, created_at')
-    .order('created_at', { ascending: false })
-
-  const list = testimonials ?? []
+  let list: Record<string, unknown>[] = []
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('testimonials')
+      .select('id, name, location, review, rating, is_featured, is_pending, created_at')
+      .order('created_at', { ascending: false })
+    list = data ?? []
+  } catch {}
   const pending = list.filter((t) => t.is_pending)
   const approved = list.filter((t) => !t.is_pending)
 

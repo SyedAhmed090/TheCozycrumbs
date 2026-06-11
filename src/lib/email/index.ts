@@ -1,14 +1,26 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-let _resend: Resend | null = null
+function getTransporter() {
+  const host = process.env.SMTP_HOST
+  const port = parseInt(process.env.SMTP_PORT ?? '587', 10)
+  const user = process.env.SMTP_USER
+  const pass = process.env.SMTP_PASS
 
-function getResend(): Resend {
-  if (!_resend) {
-    const key = process.env.RESEND_API_KEY
-    if (!key) throw new Error('RESEND_API_KEY is not set')
-    _resend = new Resend(key)
+  if (!host || !user || !pass) {
+    throw new Error('SMTP credentials not configured')
   }
-  return _resend
+
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass },
+    tls: { rejectUnauthorized: false },
+  })
+}
+
+function emailConfigured() {
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)
 }
 
 const FROM = process.env.EMAIL_FROM ?? 'The Cozy Crumb <noreply@thecozycrumbs.com>'
@@ -26,7 +38,7 @@ export async function sendOrderConfirmation(order: {
   discountAmount?: number
   items: Array<{ productName: string; quantity: number; price: number | null; variant: Record<string, string> }>
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!emailConfigured()) return
 
   const paymentLabel = order.paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'Cash on Delivery'
   const finalTotal = order.subtotal - (order.discountAmount ?? 0)
@@ -56,7 +68,7 @@ export async function sendOrderConfirmation(order: {
         </div>
         <div style="padding:32px;">
           <p style="font-size:16px;margin:0 0 8px;">Hi ${order.customerName},</p>
-          <p style="font-size:14px;color:#6B5744;margin:0 0 24px;">Your order has been placed successfully! We&apos;ll confirm it shortly and get baking.</p>
+          <p style="font-size:14px;color:#6B5744;margin:0 0 24px;">Your order has been placed successfully! We'll confirm it shortly and get baking.</p>
 
           <div style="background:#faf7f4;border-radius:12px;padding:16px 20px;margin-bottom:24px;">
             <p style="margin:0 0 4px;font-size:11px;color:#9B8B7A;text-transform:uppercase;letter-spacing:1px;">Order ID</p>
@@ -74,7 +86,7 @@ export async function sendOrderConfirmation(order: {
             <tbody>${itemRows}</tbody>
           </table>
 
-          ${order.discountAmount ? `<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:#9B8B7A;border-top:1px solid #f0ebe6;"><span>Discount</span><span>− PKR ${order.discountAmount.toLocaleString()}</span></div>` : ''}
+          ${order.discountAmount ? `<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:#9B8B7A;border-top:1px solid #f0ebe6;"><span>Discount</span><span>- PKR ${order.discountAmount.toLocaleString()}</span></div>` : ''}
           <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:16px;font-weight:700;border-top:1px solid #ede8e3;">
             <span>Total</span>
             <span style="color:#5A3E2B;">PKR ${finalTotal.toLocaleString()}</span>
@@ -100,13 +112,13 @@ export async function sendOrderConfirmation(order: {
           <p style="margin:28px 0 0;font-size:13px;color:#9B8B7A;text-align:center;">Questions? WhatsApp us at <strong>+92 335 0253548</strong></p>
         </div>
         <div style="padding:20px;text-align:center;border-top:1px solid #f0ebe6;">
-          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumb · Karachi · Made with love 🍪</p>
+          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumb · Karachi · Made with love</p>
         </div>
       </div>
     </body>
     </html>`
 
-  await getResend().emails.send({
+  await getTransporter().sendMail({
     from: FROM,
     to: order.customerEmail,
     subject: `Order Confirmed — #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumb`,
@@ -128,12 +140,12 @@ export async function sendAdminOrderAlert(order: {
   notes?: string | null
   items: Array<{ productName: string; quantity: number; price: number | null; variant: Record<string, string> }>
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!emailConfigured()) return
 
   const paymentLabel = order.paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'Cash on Delivery'
   const itemList = order.items.map((item) => {
     const variantStr = Object.values(item.variant).filter(Boolean).join(' · ')
-    return `• ${item.productName} × ${item.quantity}${variantStr ? ` (${variantStr})` : ''}${item.price != null ? ` — PKR ${(item.price * item.quantity).toLocaleString()}` : ''}`
+    return `&bull; ${item.productName} &times; ${item.quantity}${variantStr ? ` (${variantStr})` : ''}${item.price != null ? ` &mdash; PKR ${(item.price * item.quantity).toLocaleString()}` : ''}`
   }).join('<br>')
 
   const html = `
@@ -142,8 +154,8 @@ export async function sendAdminOrderAlert(order: {
     <body style="margin:0;padding:0;background:#faf7f4;font-family:Helvetica,Arial,sans-serif;color:#2A2A2A;">
       <div style="max-width:560px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #ede8e3;">
         <div style="background:#D97A52;padding:24px 32px;">
-          <h1 style="margin:0;color:#fff;font-size:20px;">🛒 New Order Received!</h1>
-          <p style="margin:4px 0 0;color:rgba(255,255,255,0.85);font-size:13px;">#${order.id.slice(0, 8).toUpperCase()} · ${new Date().toLocaleString('en-PK')}</p>
+          <h1 style="margin:0;color:#fff;font-size:20px;">New Order Received!</h1>
+          <p style="margin:4px 0 0;color:rgba(255,255,255,0.85);font-size:13px;">#${order.id.slice(0, 8).toUpperCase()}</p>
         </div>
         <div style="padding:28px 32px;">
           <h3 style="margin:0 0 12px;font-size:13px;color:#9B8B7A;text-transform:uppercase;letter-spacing:1px;">Customer</h3>
@@ -176,14 +188,14 @@ export async function sendAdminOrderAlert(order: {
 
           <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://thecozycrumbs.com'}/admin/orders/${order.id}"
              style="display:block;margin-top:24px;text-align:center;background:#5A3E2B;color:#fff;padding:12px;border-radius:50px;font-weight:600;font-size:14px;text-decoration:none;">
-            View Order in Admin →
+            View Order in Admin
           </a>
         </div>
       </div>
     </body>
     </html>`
 
-  await getResend().emails.send({
+  await getTransporter().sendMail({
     from: FROM,
     to: ADMIN_EMAIL,
     subject: `New Order #${order.id.slice(0, 8).toUpperCase()} — ${order.customerName} — PKR ${order.subtotal.toLocaleString()}`,
@@ -200,7 +212,7 @@ export async function sendStatusUpdate(order: {
   status: string
   deliveryDate: string
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!emailConfigured()) return
 
   const STATUS_MESSAGES: Record<string, { label: string; message: string; color: string }> = {
     confirmed: {
@@ -209,7 +221,7 @@ export async function sendStatusUpdate(order: {
       color: '#3B82F6',
     },
     baking: {
-      label: 'We\'re Baking!',
+      label: "We're Baking!",
       message: 'Your order is in the oven! Our bakers are crafting your treats with love.',
       color: '#F97316',
     },
@@ -219,7 +231,7 @@ export async function sendStatusUpdate(order: {
       color: '#8B5CF6',
     },
     delivered: {
-      label: 'Delivered! 🎉',
+      label: 'Delivered!',
       message: 'Your order has been delivered. We hope you enjoy every bite!',
       color: '#10B981',
     },
@@ -257,7 +269,7 @@ export async function sendStatusUpdate(order: {
     </body>
     </html>`
 
-  await getResend().emails.send({
+  await getTransporter().sendMail({
     from: FROM,
     to: order.customerEmail,
     subject: `${info.label} — Order #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumb`,

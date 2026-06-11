@@ -10,13 +10,17 @@ export const metadata: Metadata = {
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = createAdminClient()
 
-  const { data: order } = await supabase
-    .from('orders')
-    .select('*, order_items(*)')
-    .eq('id', id)
-    .single()
+  let order = null
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('*, order_items(*)')
+      .eq('id', id)
+      .single()
+    order = data
+  } catch {}
 
   if (!order) notFound()
 

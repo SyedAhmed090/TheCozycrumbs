@@ -19,13 +19,15 @@ async function deleteSubscriber(id: string) {
 }
 
 export default async function AdminSubscribersPage() {
-  const supabase = createAdminClient()
-  const { data: subscribers } = await supabase
-    .from('newsletter_subscribers')
-    .select('id, email, name, is_active, subscribed_at')
-    .order('subscribed_at', { ascending: false })
-
-  const list = subscribers ?? []
+  let list: Record<string, unknown>[] = []
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('newsletter_subscribers')
+      .select('id, email, name, is_active, subscribed_at')
+      .order('subscribed_at', { ascending: false })
+    list = data ?? []
+  } catch {}
   const activeCount = list.filter((s) => s.is_active).length
 
   return (

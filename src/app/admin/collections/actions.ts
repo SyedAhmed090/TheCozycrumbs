@@ -7,21 +7,19 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export async function createCollection(formData: FormData) {
   const supabase = createAdminClient()
 
-  const name = (formData.get('name') as string).trim()
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-  const description = (formData.get('description') as string | null)?.trim() ?? null
-  const banner_image = (formData.get('banner_image') as string | null)?.trim() || null
+  const title = ((formData.get('title') as string) ?? '').trim()
+  const subtitle = ((formData.get('subtitle') as string) ?? '').trim() || null
+  const description = ((formData.get('description') as string) ?? '').trim()
+  const image = ((formData.get('image') as string) ?? '').trim() || null
   const is_active = formData.get('is_active') === 'true'
-  const start_date = (formData.get('start_date') as string | null) || null
   const end_date = (formData.get('end_date') as string | null) || null
 
   const { error } = await supabase.from('seasonal_collections').insert({
-    name,
-    slug,
+    title,
+    subtitle,
     description,
-    banner_image,
+    image,
     is_active,
-    start_date,
     end_date,
   })
 
@@ -33,19 +31,19 @@ export async function createCollection(formData: FormData) {
 export async function updateCollection(id: string, formData: FormData) {
   const supabase = createAdminClient()
 
-  const name = (formData.get('name') as string).trim()
-  const description = (formData.get('description') as string | null)?.trim() ?? null
-  const banner_image = (formData.get('banner_image') as string | null)?.trim() || null
+  const title = ((formData.get('title') as string) ?? '').trim()
+  const subtitle = ((formData.get('subtitle') as string) ?? '').trim() || null
+  const description = ((formData.get('description') as string) ?? '').trim()
+  const image = ((formData.get('image') as string) ?? '').trim() || null
   const is_active = formData.get('is_active') === 'true'
-  const start_date = (formData.get('start_date') as string | null) || null
   const end_date = (formData.get('end_date') as string | null) || null
 
   const { error } = await supabase.from('seasonal_collections').update({
-    name,
+    title,
+    subtitle,
     description,
-    banner_image,
+    image,
     is_active,
-    start_date,
     end_date,
   }).eq('id', id)
 
