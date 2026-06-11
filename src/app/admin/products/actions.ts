@@ -9,12 +9,12 @@ function slugify(name: string) {
 }
 
 function parseFormData(formData: FormData) {
-  const name = (formData.get('name') as string).trim()
-  const description = (formData.get('description') as string).trim()
-  const category = formData.get('category') as string
-  const base_price_raw = formData.get('base_price') as string
+  const name = ((formData.get('name') as string) ?? '').trim()
+  const description = ((formData.get('description') as string) ?? '').trim()
+  const category = (formData.get('category') as string) ?? ''
+  const base_price_raw = (formData.get('base_price') as string) ?? ''
   const base_price = base_price_raw ? parseFloat(base_price_raw) : null
-  const stock_raw = formData.get('stock_quantity') as string
+  const stock_raw = (formData.get('stock_quantity') as string) ?? ''
   const stock_quantity = stock_raw ? parseInt(stock_raw) : null
   const is_available = formData.get('is_available') === 'true'
   const is_featured = formData.get('is_featured') === 'on'
@@ -33,10 +33,21 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
-  const { name, ...rest } = parseFormData(formData)
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('products').update({ name, ...rest }).eq('id', id)
-  if (error) throw new Error(error.message)
+  let dbError: string | null = null
+
+  try {
+    const { name, ...rest } = parseFormData(formData)
+    const supabase = createAdminClient()
+    const { error } = await supabase.from('products').update({ name, ...rest }).eq('id', id)
+    if (error) dbError = error.message
+  } catch (e) {
+    dbError = e instanceof Error ? e.message : String(e)
+  }
+
+  if (dbError) {
+    redirect(`/admin/products/${id}?error=${encodeURIComponent(dbError)}`)
+  }
+
   revalidatePath('/admin/products')
   revalidatePath(`/admin/products/${id}`)
   redirect('/admin/products')

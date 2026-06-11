@@ -8,8 +8,15 @@ import ImageUploader from '@/components/admin/ImageUploader'
 
 export const metadata: Metadata = { title: 'Edit Product' }
 
-export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ error?: string }>
+}) {
   const { id } = await params
+  const { error: actionError } = await searchParams
   const supabase = createAdminClient()
   const { data: product } = await supabase
     .from('products')
@@ -28,6 +35,13 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         <Link href="/admin/products" className="text-gray-400 hover:text-gray-700 text-sm">← Products</Link>
         <h1 className="font-fraunces text-2xl text-chocolate">Edit: {product.name}</h1>
       </div>
+
+      {actionError && (
+        <div className="max-w-2xl mb-4 bg-red-50 border border-red-100 rounded-2xl p-4">
+          <p className="font-inter font-semibold text-sm text-red-700 mb-0.5">Could not save changes</p>
+          <p className="font-inter text-xs text-red-500 font-mono">{actionError}</p>
+        </div>
+      )}
 
       <form action={updateAction} className="max-w-2xl flex flex-col gap-6">
 
