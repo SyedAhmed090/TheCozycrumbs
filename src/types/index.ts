@@ -13,6 +13,31 @@ export type ProductVariant = {
   weight?: string
   shape?: string
   frosting?: string
+  box_contents?: string
+}
+
+export type BoxSize = 4 | 6 | 12
+
+export type GiftBoxItem = {
+  id: string
+  name: string
+  category: Category
+  unit_price: number
+  emoji: string
+  description: string
+  color: string
+  lightText: boolean
+}
+
+export type FilledSlot = {
+  slotId: string
+  itemId: string
+  name: string
+  unit_price: number
+  emoji: string
+  color: string
+  lightText: boolean
+  category: string
 }
 
 export type Product = {
@@ -36,6 +61,9 @@ export type CartItem = {
   custom_message?: string
   reference_image_url?: string
   price: number | null
+  is_gift_box?: boolean
+  box_size?: BoxSize
+  box_contents?: FilledSlot[]
 }
 
 export type OrderStatus =

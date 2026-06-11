@@ -1,4 +1,4 @@
-import type { Product } from '@/types'
+import type { Product, GiftBoxItem, BoxSize } from '@/types'
 
 export const DUMMY_PRODUCTS: Product[] = [
   // ── CAKES ────────────────────────────────────────────────
@@ -323,3 +323,107 @@ export const DUMMY_PRODUCTS: Product[] = [
     created_at: '2024-01-24T00:00:00Z',
   },
 ]
+
+// ── GIFT BOX BUILDER ─────────────────────────────────────────
+
+export const GIFT_BOX_ITEMS: GiftBoxItem[] = [
+  {
+    id: 'gbi-classic-fudge',
+    name: 'Classic Fudge Brownie',
+    category: 'brownies',
+    unit_price: 85,
+    emoji: '🍫',
+    description: 'Dense, crackle-topped, deeply chocolatey',
+    color: '#3D1C0F',
+    lightText: true,
+  },
+  {
+    id: 'gbi-choc-chunk',
+    name: 'Chocolate Chunk Brownie',
+    category: 'brownies',
+    unit_price: 120,
+    emoji: '🍫',
+    description: 'Pools of melted chocolate in every bite',
+    color: '#5A3E2B',
+    lightText: true,
+  },
+  {
+    id: 'gbi-salted-caramel',
+    name: 'Salted Caramel Brownie',
+    category: 'brownies',
+    unit_price: 120,
+    emoji: '🍮',
+    description: 'Caramel ribboned through a fudgy base, pinch of salt',
+    color: '#C89B6D',
+    lightText: false,
+  },
+  {
+    id: 'gbi-oreo-madness',
+    name: 'Oreo Madness Brownie',
+    category: 'brownies',
+    unit_price: 120,
+    emoji: '⚫',
+    description: 'Crushed Oreos baked in, whole ones pressed on top',
+    color: '#1E1E1E',
+    lightText: true,
+  },
+  {
+    id: 'gbi-choc-chip',
+    name: 'Chocolate Chip Brownie',
+    category: 'brownies',
+    unit_price: 120,
+    emoji: '🍪',
+    description: 'Pockets of melted chocolate chips in every bite',
+    color: '#7B4F2E',
+    lightText: true,
+  },
+  {
+    id: 'gbi-nankhatai',
+    name: 'Nankhatai',
+    category: 'cookies',
+    unit_price: 70,
+    emoji: '✨',
+    description: 'Crumbly ghee shortbread with cardamom',
+    color: '#F0D9B5',
+    lightText: false,
+  },
+]
+
+export const GIFT_BOX_PRODUCTS: Record<BoxSize, Product> = {
+  4: {
+    id: 'gift-box-4',
+    name: 'Custom Gift Box – 4 Pack',
+    slug: 'custom-gift-box-4',
+    description: 'A handpicked selection of 4 individually chosen treats.',
+    category: 'gift-boxes',
+    base_price: null,
+    images: [],
+    is_available: true,
+    is_featured: false,
+    created_at: '2024-02-01T00:00:00Z',
+  },
+  6: {
+    id: 'gift-box-6',
+    name: 'Custom Gift Box – 6 Pack',
+    slug: 'custom-gift-box-6',
+    description: 'A beautiful mix of 6 individually chosen treats.',
+    category: 'gift-boxes',
+    base_price: null,
+    images: [],
+    is_available: true,
+    is_featured: false,
+    created_at: '2024-02-01T00:00:00Z',
+  },
+  12: {
+    id: 'gift-box-12',
+    name: 'Custom Gift Box – 12 Pack',
+    slug: 'custom-gift-box-12',
+    description: 'The ultimate 12-treat custom gift box.',
+    category: 'gift-boxes',
+    base_price: null,
+    images: [],
+    is_available: true,
+    is_featured: false,
+    created_at: '2024-02-01T00:00:00Z',
+  },
+}
