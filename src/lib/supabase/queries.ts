@@ -31,7 +31,12 @@ export async function getProducts(category?: string): Promise<Product[]> {
     const { data, error } = await query
 
     if (error) throw error
-    return (data as Product[]) ?? []
+    // If DB is empty, fall back to seed data so the site stays functional
+    if (!data || data.length === 0) {
+      const fallback = DUMMY_PRODUCTS.filter((p) => p.is_available)
+      return category ? fallback.filter((p) => p.category === category) : fallback
+    }
+    return data as Product[]
   } catch {
     const fallback = DUMMY_PRODUCTS.filter((p) => p.is_available)
     return category ? fallback.filter((p) => p.category === category) : fallback
