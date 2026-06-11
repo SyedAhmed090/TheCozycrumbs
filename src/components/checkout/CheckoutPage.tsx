@@ -49,6 +49,7 @@ export default function CheckoutPage() {
   const [deliveryDate, setDeliveryDate] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod')
   const [notes, setNotes] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -71,6 +72,7 @@ export default function CheckoutPage() {
   }
 
   async function handlePlaceOrder() {
+    if (honeypot) return
     if (!validate()) return
     setSubmitting(true)
     setSubmitError('')
@@ -279,10 +281,26 @@ export default function CheckoutPage() {
             </div>
           </div>
 
+          {/* Honeypot — hidden from real users, filled only by bots */}
+          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
+
           {/* Section 3 — Special Notes */}
           <div>
             <h2 className="font-fraunces text-2xl text-chocolate mb-6">Special Notes</h2>
+            <label htmlFor="order-notes" className="sr-only">Special instructions, allergies, or notes</label>
             <textarea
+              id="order-notes"
               placeholder="Any special instructions, allergies, or notes..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

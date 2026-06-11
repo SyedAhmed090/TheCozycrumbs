@@ -308,7 +308,11 @@ export default function CakeBuilder() {
           >
             <div className="flex flex-col gap-4">
               <div>
+                <label htmlFor="cake-message" className="block font-inter text-sm font-medium text-ink mb-1.5">
+                  Message for the cake
+                </label>
                 <textarea
+                  id="cake-message"
                   value={message}
                   maxLength={100}
                   onChange={(e) => setMessage(e.target.value)}

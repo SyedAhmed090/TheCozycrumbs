@@ -1,4 +1,15 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = {
+  title: 'Shop',
+  description:
+    'Browse fresh cookies, brownies, custom cakes, savoury breads, and gift boxes from The Cozy Crumb. Filter by category and order online.',
+  openGraph: {
+    title: 'Shop | The Cozy Crumb',
+    description: 'Browse our full range of freshly baked treats — cookies, brownies, cakes, savoury breads, and personalised gift boxes.',
+  },
+}
 import ShopHero from '@/components/shop/ShopHero'
 import ShopFilters from '@/components/shop/ShopFilters'
 import ProductGrid from '@/components/shop/ProductGrid'

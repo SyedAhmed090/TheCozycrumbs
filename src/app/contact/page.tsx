@@ -1,5 +1,16 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MessageCircle, Camera, Mail, Clock, MapPin } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description:
+    'Get in touch with The Cozy Crumb via WhatsApp, Instagram, or email. We handle custom cake inquiries, bulk orders, and general questions.',
+  openGraph: {
+    title: 'Contact Us | The Cozy Crumb',
+    description: 'Reach The Cozy Crumb on WhatsApp for orders and custom cakes, or via Instagram and email.',
+  },
+}
 
 const CONTACT_METHODS = [
   { icon: MessageCircle, label: 'WhatsApp', value: '+92 335 025 3548', description: 'Fastest way to reach us. Most orders and custom cake inquiries are handled here.', href: 'https://wa.me/923350253548', cta: 'Message on WhatsApp', cardClass: 'bg-[#25D366]/5 border-[#25D366]/20', iconClass: 'bg-[#25D366]/10 text-[#25D366]' },

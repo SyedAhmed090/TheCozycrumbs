@@ -1,3 +1,10 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms & Conditions',
+  description: 'Read The Cozy Crumb terms and conditions for purchasing baked goods, custom orders, and gift boxes.',
+}
+
 const SECTIONS = [
   {
     title: '1. Acceptance of Terms',

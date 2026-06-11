@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
 import { Edit, XCircle } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'How to Order',
+  description:
+    'Step-by-step guide to placing an order at The Cozy Crumb. Browse, add to cart, choose delivery, and pay via EasyPaisa or Cash on Delivery.',
+}
 
 const STEPS = [
   { step: '01', title: 'Browse & Add to Cart', body: 'Visit our Shop and browse all available items. Click on any product to see details, then add it to your cart. You can view your cart at any time by clicking the bag icon in the header.' },

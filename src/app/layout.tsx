@@ -18,9 +18,29 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'The Cozy Crumb | Freshly Baked Happiness',
+  metadataBase: new URL('https://thecozycrumbs.com'),
+  title: {
+    default: 'The Cozy Crumb | Freshly Baked Happiness',
+    template: '%s | The Cozy Crumb',
+  },
   description:
     'The Cozy Crumb is a premium home bakery in Karachi crafting fresh cookies, brownies, cakes, cupcakes, and gift boxes made with love.',
+  openGraph: {
+    type: 'website',
+    locale: 'en_PK',
+    url: 'https://thecozycrumbs.com',
+    siteName: 'The Cozy Crumb',
+    title: 'The Cozy Crumb | Freshly Baked Happiness',
+    description:
+      'A premium home bakery in Karachi crafting fresh cookies, brownies, cakes, cupcakes, and gift boxes made with love.',
+    images: [{ url: '/001.jpg', width: 1200, height: 630, alt: 'The Cozy Crumb bakery treats' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Cozy Crumb | Freshly Baked Happiness',
+    description: 'A premium home bakery in Karachi crafting fresh cookies, brownies, cakes, and gift boxes.',
+    images: ['/001.jpg'],
+  },
 }
 
 export default function RootLayout({
