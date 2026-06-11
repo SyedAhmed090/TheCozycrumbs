@@ -96,7 +96,7 @@ export default async function AdminCollectionsPage() {
                 <tr key={c.id as string} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      {c.image && (
+                      {Boolean(c.image) && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={c.image as string} alt="" className="w-10 h-10 rounded-lg object-cover bg-gray-100" />
                       )}

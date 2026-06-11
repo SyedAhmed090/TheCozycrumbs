@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { updateProduct, deleteProduct } from '../actions'
 import { CATEGORIES } from '@/lib/constants/products'
 import ImageUploader from '@/components/admin/ImageUploader'
+import DeleteProductButton from '@/components/admin/DeleteProductButton'
 
 export const metadata: Metadata = { title: 'Edit Product' }
 
@@ -189,17 +190,7 @@ export default async function EditProductPage({
         <p className="text-xs text-red-500 mb-3">
           This permanently removes the product from the website. Existing orders that included this product will keep the name but lose the link.
         </p>
-        <form
-          action={deleteAction}
-          onSubmit={(e) => { if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) e.preventDefault() }}
-        >
-          <button
-            type="submit"
-            className="bg-red-600 text-white font-inter font-medium text-sm px-4 py-2 rounded-xl hover:bg-red-700 transition-colors"
-          >
-            Delete this product
-          </button>
-        </form>
+        <DeleteProductButton productName={product.name as string} action={deleteAction} />
       </div>
     </div>
   )
