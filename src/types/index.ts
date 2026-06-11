@@ -50,6 +50,7 @@ export type Product = {
   images: string[]
   is_available: boolean
   is_featured: boolean
+  stock_quantity?: number | null
   created_at: string
 }
 
@@ -69,7 +70,7 @@ export type CartItem = {
 export type OrderStatus =
   | 'pending'
   | 'confirmed'
-  | 'preparing'
+  | 'baking'
   | 'out_for_delivery'
   | 'delivered'
   | 'cancelled'
@@ -92,6 +93,7 @@ export type Order = {
   id: string
   customer_name: string
   customer_phone: string
+  customer_email: string | null
   customer_address: string
   items: OrderItem[]
   subtotal: number | null
@@ -99,7 +101,31 @@ export type Order = {
   delivery_date: string
   payment_method: PaymentMethod
   notes: string | null
+  discount_code: string | null
+  discount_amount: number
   created_at: string
+}
+
+export type DiscountCode = {
+  id: string
+  code: string
+  description: string | null
+  discount_type: 'percentage' | 'fixed'
+  discount_value: number
+  min_order_amount: number | null
+  max_uses: number | null
+  used_count: number
+  is_active: boolean
+  expires_at: string | null
+  created_at: string
+}
+
+export type NewsletterSubscriber = {
+  id: string
+  email: string
+  name: string | null
+  is_active: boolean
+  subscribed_at: string
 }
 
 export type Testimonial = {

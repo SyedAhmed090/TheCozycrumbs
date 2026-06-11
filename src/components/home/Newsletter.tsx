@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { useState, FormEvent } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Loader2 } from 'lucide-react'
+import { subscribeNewsletter } from '@/app/actions/newsletter'
 
 function fadeUp(delay = 0) {
   return {
@@ -17,8 +18,9 @@ export default function Newsletter() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const trimmed = email.trim()
     if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
@@ -26,8 +28,16 @@ export default function Newsletter() {
       return
     }
     setError('')
-    setSubmitted(true)
-    setEmail('')
+    setLoading(true)
+    try {
+      await subscribeNewsletter(trimmed)
+      setSubmitted(true)
+      setEmail('')
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -41,7 +51,7 @@ export default function Newsletter() {
           {...fadeUp(0.1)}
           className="font-fraunces text-[28px] sm:text-[34px] lg:text-[38px] font-normal text-chocolate leading-[1.2] tracking-[-1px] mb-4 mt-4"
         >
-          Fresh Bakes, New Flavors & Exclusive Offers
+          Fresh Bakes, New Flavors &amp; Exclusive Offers
         </motion.h2>
 
         <motion.p {...fadeUp(0.18)} className="text-base text-muted leading-[1.6] mb-9">
@@ -59,23 +69,24 @@ export default function Newsletter() {
             <p className="text-sm text-muted">We&apos;ll let you know about new arrivals and specials.</p>
           </motion.div>
         ) : (
-          <motion.form {...fadeUp(0.26)} onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-[460px] mx-auto">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              className="flex-1 px-6 py-4 border border-edge rounded-full font-inter text-sm bg-white text-ink outline-none focus:border-caramel transition-colors placeholder:text-muted"
-            />
-            <button
-              type="submit"
-              className="bg-chocolate text-white rounded-full px-8 py-4 font-semibold text-sm hover:bg-chocolate-dark transition-all hover:-translate-y-0.5 hover:shadow-lg whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-            {error && (
-              <p className="text-terracotta text-xs w-full text-left px-2 -mt-1">{error}</p>
-            )}
+          <motion.form {...fadeUp(0.26)} onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-[460px] mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setError('') }}
+                placeholder="Your email address"
+                className="flex-1 px-6 py-4 border border-edge rounded-full font-inter text-sm bg-white text-ink outline-none focus:border-caramel transition-colors placeholder:text-muted"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-chocolate text-white rounded-full px-8 py-4 font-semibold text-sm hover:bg-chocolate-dark transition-all hover:-translate-y-0.5 hover:shadow-lg whitespace-nowrap disabled:opacity-70 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
+              </button>
+            </div>
+            {error && <p className="text-terracotta text-xs text-left px-2">{error}</p>}
           </motion.form>
         )}
       </div>
