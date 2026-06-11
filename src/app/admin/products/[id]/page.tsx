@@ -17,14 +17,39 @@ export default async function EditProductPage({
 }) {
   const { id } = await params
   const { error: actionError } = await searchParams
-  const supabase = createAdminClient()
-  const { data: product } = await supabase
-    .from('products')
-    .select('*')
-    .eq('id', id)
-    .single()
 
-  if (!product) notFound()
+  let product: Record<string, unknown> | null = null
+  let loadError: string | null = null
+
+  try {
+    const supabase = createAdminClient()
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single()
+    if (error) loadError = error.message
+    else product = data
+  } catch (e) {
+    loadError = e instanceof Error ? e.message : 'Could not load product'
+  }
+
+  if (!product && !loadError) notFound()
+
+  if (loadError) {
+    return (
+      <div>
+        <Link href="/admin/products" className="text-gray-400 hover:text-gray-700 text-sm">← Products</Link>
+        <div className="mt-6 bg-red-50 border border-red-100 rounded-2xl p-6">
+          <p className="font-inter font-semibold text-sm text-red-700 mb-1">Could not load product</p>
+          <p className="font-inter text-xs text-red-500 font-mono">{loadError}</p>
+          <p className="font-inter text-xs text-gray-500 mt-2">
+            Make sure <code className="bg-gray-100 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> is set in your environment variables.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   const updateAction = updateProduct.bind(null, id)
   const deleteAction = deleteProduct.bind(null, id)
