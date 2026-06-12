@@ -14,13 +14,13 @@ import InstagramGrid from '@/components/home/InstagramGrid'
 import { getFeaturedProducts, getActiveSeasonalCollection } from '@/lib/supabase/queries'
 
 export const metadata: Metadata = {
-  title: 'The Cozy Crumb | Freshly Baked Happiness',
+  title: 'The Cozy Crumbs | Freshly Baked Happiness',
   description:
     'Premium home bakery in Karachi. Fresh cookies, brownies, custom cakes, cupcakes, and personalised gift boxes — baked with love and delivered to your door.',
   openGraph: {
-    title: 'The Cozy Crumb | Freshly Baked Happiness',
+    title: 'The Cozy Crumbs | Freshly Baked Happiness',
     description: 'Premium home bakery in Karachi. Fresh cookies, brownies, custom cakes, and gift boxes baked with love.',
-    images: [{ url: '/001.jpg', width: 1200, height: 630, alt: 'The Cozy Crumb freshly baked treats' }],
+    images: [{ url: '/001.jpg', width: 1200, height: 630, alt: 'The Cozy Crumbs freshly baked treats' }],
   },
 }
 

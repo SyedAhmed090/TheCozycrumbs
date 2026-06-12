@@ -23,7 +23,7 @@ function emailConfigured() {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)
 }
 
-const FROM = process.env.EMAIL_FROM ?? 'The Cozy Crumb <noreply@thecozycrumbs.com>'
+const FROM = process.env.EMAIL_FROM ?? 'The Cozy Crumbs <noreply@thecozycrumbs.com>'
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL ?? 'asad@cloudfruit.com'
 
 // ── Order confirmation to customer ─────────────────────────────────────────
@@ -63,7 +63,7 @@ export async function sendOrderConfirmation(order: {
     <body style="margin:0;padding:0;background:#faf7f4;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2A2A2A;">
       <div style="max-width:560px;margin:32px auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #ede8e3;">
         <div style="background:#5A3E2B;padding:32px;text-align:center;">
-          <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:400;font-family:Georgia,serif;">The Cozy Crumb</h1>
+          <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:400;font-family:Georgia,serif;">The Cozy Crumbs</h1>
           <p style="margin:8px 0 0;color:rgba(255,255,255,0.7);font-size:13px;">Order Confirmation</p>
         </div>
         <div style="padding:32px;">
@@ -112,7 +112,7 @@ export async function sendOrderConfirmation(order: {
           <p style="margin:28px 0 0;font-size:13px;color:#9B8B7A;text-align:center;">Questions? WhatsApp us at <strong>+92 335 0253548</strong></p>
         </div>
         <div style="padding:20px;text-align:center;border-top:1px solid #f0ebe6;">
-          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumb · Karachi · Made with love</p>
+          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumbs · Karachi · Made with love</p>
         </div>
       </div>
     </body>
@@ -121,7 +121,7 @@ export async function sendOrderConfirmation(order: {
   await getTransporter().sendMail({
     from: FROM,
     to: order.customerEmail,
-    subject: `Order Confirmed — #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumb`,
+    subject: `Order Confirmed — #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumbs`,
     html,
   })
 }
@@ -263,7 +263,7 @@ export async function sendStatusUpdate(order: {
           <p style="font-size:13px;color:#9B8B7A;margin:0;">Questions? WhatsApp us at <strong>+92 335 0253548</strong></p>
         </div>
         <div style="padding:16px;text-align:center;border-top:1px solid #f0ebe6;">
-          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumb · Karachi</p>
+          <p style="margin:0;font-size:12px;color:#C4B0A0;">The Cozy Crumbs · Karachi</p>
         </div>
       </div>
     </body>
@@ -272,7 +272,7 @@ export async function sendStatusUpdate(order: {
   await getTransporter().sendMail({
     from: FROM,
     to: order.customerEmail,
-    subject: `${info.label} — Order #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumb`,
+    subject: `${info.label} — Order #${order.id.slice(0, 8).toUpperCase()} | The Cozy Crumbs`,
     html,
   })
 }

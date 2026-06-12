@@ -35,7 +35,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: 'What are the delivery charges?',
-        a: 'Delivery charges vary by area and are calculated at checkout. Standard delivery within central Karachi is between Rs. 100–200. Further areas may have higher charges.',
+        a: 'Delivery charges are confirmed by us on WhatsApp after your order is placed, based on your delivery area. Standard delivery within central Karachi is between Rs. 100–200. Further areas may have higher charges. See our Delivery Policy for standard charges.',
       },
       {
         q: 'How are orders packaged?',
@@ -43,7 +43,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: 'Can I pick up my order?',
-        a: "Yes, self-pickup is available. Please select this option at checkout and we'll share the pickup address and time via WhatsApp.",
+        a: 'Yes, self-pickup is available. Please mention this in your order notes or message us on WhatsApp at +92 335 0253548 and we will share the pickup address and time.',
       },
     ],
   },
@@ -119,9 +119,19 @@ function AccordionItem({
   isOpen: boolean
   onToggle: () => void
 }) {
+  const panelId = `faq-panel-${q.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase()}`
+  const buttonId = `faq-button-${q.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase()}`
+
   return (
-    <div className="border-b border-edge py-5 cursor-pointer" onClick={onToggle}>
-      <div className="flex items-center justify-between font-medium text-ink text-[15px]">
+    <div className="border-b border-edge">
+      <button
+        type="button"
+        id={buttonId}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="w-full flex items-center justify-between py-5 font-medium text-ink text-[15px] text-left cursor-pointer"
+      >
         <span>{q}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
@@ -130,18 +140,21 @@ function AccordionItem({
         >
           <ChevronDown size={18} className="text-muted" />
         </motion.div>
-      </div>
+      </button>
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             key="answer"
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <p className="text-[14px] text-muted leading-[1.7] mt-3 pb-2">{a}</p>
+            <p className="text-[14px] text-muted leading-[1.7] mt-3 pb-5">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -164,7 +177,7 @@ export default function FAQsPage() {
           Questions
           <span className="w-8 h-px bg-caramel" />
         </p>
-        <h1 className="font-fraunces text-[36px] sm:text-[50px] lg:text-[62px] font-normal text-chocolate tracking-[-1.8px] leading-[1.08] mb-6">
+        <h1 className="font-fraunces text-[30px] sm:text-[50px] lg:text-[62px] font-normal text-chocolate tracking-[-1.8px] leading-[1.08] mb-6">
           Frequently Asked
           <br />
           <em className="italic text-terracotta">Questions</em>
@@ -178,7 +191,7 @@ export default function FAQsPage() {
         <div className="max-w-[800px] mx-auto flex flex-col gap-16">
           {FAQ_CATEGORIES.map((cat) => (
             <div key={cat.title}>
-              <h2 className="font-fraunces text-[30px] text-chocolate mb-6 pb-4 border-b-2 border-caramel/20">
+              <h2 className="font-fraunces text-[22px] sm:text-[26px] lg:text-[30px] text-chocolate mb-6 pb-4 border-b-2 border-caramel/20">
                 {cat.title}
               </h2>
               <div>

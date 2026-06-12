@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { X, Minus, Plus, Trash2 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCartStore } from '@/store/cartStore'
@@ -22,6 +23,19 @@ export default function CartDrawer() {
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const subtotal = useCartStore((s) => s.totalPrice())
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  const allPricesNull = items.length > 0 && items.every((item) => item.price == null)
 
   return (
     <AnimatePresence>
@@ -49,7 +63,8 @@ export default function CartDrawer() {
               <h2 className="font-fraunces text-xl text-chocolate">Your Cart</h2>
               <button
                 onClick={closeDrawer}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-beige transition-colors"
+                aria-label="Close cart"
+                className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-beige transition-colors"
               >
                 <X size={18} className="text-ink" />
               </button>
@@ -111,12 +126,15 @@ export default function CartDrawer() {
                               )}
                               <button
                                 onClick={() => removeItem(item.cartId)}
-                                className="ml-auto text-muted hover:text-terracotta transition-colors"
+                                className="ml-auto w-9 h-9 flex items-center justify-center rounded-full hover:bg-beige text-muted hover:text-terracotta transition-colors"
                                 aria-label="Remove gift box from cart"
                               >
                                 <Trash2 size={14} />
                               </button>
                             </div>
+                            <p className="font-inter text-xs text-muted mt-2">
+                              To add another, use the Gift Box builder
+                            </p>
                           </div>
                         </div>
                       ) : (
@@ -141,14 +159,14 @@ export default function CartDrawer() {
                                     if (item.quantity <= 1) removeItem(item.cartId)
                                     else updateQuantity(item.cartId, item.quantity - 1)
                                   }}
-                                  className="w-6 h-6 flex items-center justify-center rounded-full border border-edge hover:bg-beige transition-colors"
+                                  className="w-9 h-9 flex items-center justify-center rounded-full border border-edge hover:bg-beige transition-colors"
                                 >
                                   <Minus size={11} className="text-ink" />
                                 </button>
                                 <span className="font-inter text-sm text-ink w-5 text-center">{item.quantity}</span>
                                 <button
                                   onClick={() => updateQuantity(item.cartId, item.quantity + 1)}
-                                  className="w-6 h-6 flex items-center justify-center rounded-full border border-edge hover:bg-beige transition-colors"
+                                  className="w-9 h-9 flex items-center justify-center rounded-full border border-edge hover:bg-beige transition-colors"
                                 >
                                   <Plus size={11} className="text-ink" />
                                 </button>
@@ -159,7 +177,11 @@ export default function CartDrawer() {
                                     Rs. {(item.price * item.quantity).toLocaleString()}
                                   </span>
                                 )}
-                                <button onClick={() => removeItem(item.cartId)} className="text-muted hover:text-terracotta transition-colors">
+                                <button
+                                  onClick={() => removeItem(item.cartId)}
+                                  aria-label={`Remove ${item.product.name} from cart`}
+                                  className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-beige text-muted hover:text-terracotta transition-colors"
+                                >
                                   <Trash2 size={14} />
                                 </button>
                               </div>
@@ -174,9 +196,15 @@ export default function CartDrawer() {
                 <div className="px-6 py-5 border-t border-edge bg-ivory">
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-inter text-sm text-muted">Subtotal</span>
-                    <span className="font-inter text-base font-semibold text-ink">
-                      Rs. {subtotal.toLocaleString()}
-                    </span>
+                    {allPricesNull ? (
+                      <span className="font-inter text-sm font-medium text-muted">
+                        Price confirmed after order
+                      </span>
+                    ) : (
+                      <span className="font-inter text-base font-semibold text-ink">
+                        Rs. {subtotal.toLocaleString()}
+                      </span>
+                    )}
                   </div>
                   <Link
                     href="/checkout"

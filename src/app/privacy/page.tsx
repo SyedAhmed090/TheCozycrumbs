@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Read The Cozy Crumb privacy policy to understand how we collect, use, and protect your personal information.',
+  description: 'Read The Cozy Crumbs privacy policy to understand how we collect, use, and protect your personal information.',
 }
 
 const SECTIONS = [
   {
     title: 'Introduction',
-    body: 'The Cozy Crumb ("we", "us", "our") is committed to protecting your personal information. This Privacy Policy explains what data we collect, how we use it, and your rights in relation to it. By using our website and placing orders, you consent to the practices described here.',
+    body: 'The Cozy Crumbs ("we", "us", "our") is committed to protecting your personal information. This Privacy Policy explains what data we collect, how we use it, and your rights in relation to it. By using our website and placing orders, you consent to the practices described here.',
   },
   {
     title: 'What Information We Collect',

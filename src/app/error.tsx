@@ -14,7 +14,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 pt-20 lg:pt-24 text-center">
       <p className="text-6xl mb-5">🍪</p>
       <h2 className="font-fraunces text-2xl sm:text-3xl text-chocolate mb-3">
         Something went wrong
@@ -22,7 +22,7 @@ export default function Error({
       <p className="font-inter text-muted text-sm max-w-sm mb-8">
         We hit a snag loading this page. Try refreshing or head back home.
       </p>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-3">
         <button
           onClick={reset}
           className="px-6 py-3 bg-chocolate text-white font-semibold text-sm rounded-full hover:bg-chocolate-dark transition-colors"

@@ -92,11 +92,10 @@ export default function BoxSummaryBar() {
               ? 'bg-chocolate text-white hover:bg-chocolate-dark shadow-md'
               : 'bg-edge text-muted cursor-not-allowed'
           }`}
-          aria-disabled={!isFull}
         >
           <ShoppingBag size={15} />
-          <span className="hidden xs:inline">Add Box to Cart</span>
-          <span className="xs:hidden">Add to Cart</span>
+          <span className="hidden sm:inline">Add Box to Cart</span>
+          <span className="sm:hidden">Add to Cart</span>
         </motion.button>
 
         {/* Change size */}

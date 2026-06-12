@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
-  description: 'Read The Cozy Crumb terms and conditions for purchasing baked goods, custom orders, and gift boxes.',
+  description: 'Read The Cozy Crumbs terms and conditions for purchasing baked goods, custom orders, and gift boxes.',
 }
 
 const SECTIONS = [
   {
     title: '1. Acceptance of Terms',
-    body: 'By placing an order with The Cozy Crumb, you agree to these Terms and Conditions. These terms apply to all purchases made through our website (thecozycrumbs.com). If you do not agree with any part of these terms, please do not place an order.',
+    body: 'By placing an order with The Cozy Crumbs, you agree to these Terms and Conditions. These terms apply to all purchases made through our website (thecozycrumbs.com). If you do not agree with any part of these terms, please do not place an order.',
   },
   {
     title: '2. Orders & Confirmation',
@@ -16,7 +16,7 @@ const SECTIONS = [
   },
   {
     title: '3. Pricing',
-    body: 'All prices are displayed in Pakistani Rupees (PKR). Prices are subject to change without notice. Delivery charges are added at checkout based on your location. For custom cake orders, final pricing is confirmed via WhatsApp before baking begins.',
+    body: 'All prices are displayed in Pakistani Rupees (PKR). Prices are subject to change without notice. Delivery charges are based on your location and will be confirmed via WhatsApp after order placement. Standard charges are listed in our Delivery Policy. For custom cake orders, final pricing is confirmed via WhatsApp before baking begins.',
   },
   {
     title: '4. Payment',
@@ -40,7 +40,7 @@ const SECTIONS = [
   },
   {
     title: '9. Intellectual Property',
-    body: 'All content on this website, including images, text, and design, is the property of The Cozy Crumb. You may not reproduce, copy, or republish any content without our written permission.',
+    body: 'All content on this website, including images, text, and design, is the property of The Cozy Crumbs. You may not reproduce, copy, or republish any content without our written permission.',
   },
   {
     title: '10. Changes to Terms',

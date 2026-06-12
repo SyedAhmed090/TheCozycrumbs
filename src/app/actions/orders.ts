@@ -20,9 +20,19 @@ export async function submitOrder(
   // would make insert().select() fail, and cannot update discount used_count.
   const supabase = createAdminClient()
 
+  // Recompute the subtotal from item prices server-side. The client-supplied
+  // input.subtotal cannot be trusted for discount eligibility, discount amount,
+  // or the stored order total. A null price means the item's value isn't known
+  // server-side (e.g. custom/quote items), so we can't form a reliable subtotal.
+  const hasNullPricedItem = input.items.some((item) => item.price == null)
+  const serverSubtotal = input.items.reduce(
+    (sum, item) => sum + (item.price != null ? item.price * item.quantity : 0),
+    0
+  )
+
   // Validate discount code server-side if provided
   let verifiedDiscountAmount = 0
-  if (input.discountCode && input.discountAmount && input.discountAmount > 0) {
+  if (input.discountCode && input.discountAmount && input.discountAmount > 0 && !hasNullPricedItem) {
     const { data: discount } = await supabase
       .from('discount_codes')
       .select('*')
@@ -32,17 +42,23 @@ export async function submitOrder(
 
     const expired = discount?.expires_at && new Date(discount.expires_at).getTime() < Date.now()
     const usedUp = discount?.max_uses != null && (discount.used_count ?? 0) >= discount.max_uses
-    const belowMin = discount != null && input.subtotal < (discount.min_order_amount ?? 0)
+    const belowMin = discount != null && serverSubtotal < (discount.min_order_amount ?? 0)
 
     if (discount && !expired && !usedUp && !belowMin) {
       if (discount.discount_type === 'percentage') {
-        verifiedDiscountAmount = Math.round((input.subtotal * discount.discount_value) / 100)
+        verifiedDiscountAmount = Math.round((serverSubtotal * discount.discount_value) / 100)
       } else {
         verifiedDiscountAmount = discount.discount_value
       }
-      verifiedDiscountAmount = Math.min(verifiedDiscountAmount, input.subtotal)
+      verifiedDiscountAmount = Math.min(verifiedDiscountAmount, serverSubtotal)
     }
   }
+
+  // Store the server-computed subtotal when every item has a known price.
+  // If any price is null the server can't reconstruct the true total, so fall
+  // back to the client value (which was already validated as a non-negative
+  // number) rather than persist an under-counted figure.
+  const storedSubtotal = hasNullPricedItem ? input.subtotal : serverSubtotal
 
   const { data: order, error: orderError } = await supabase
     .from('orders')
@@ -54,7 +70,7 @@ export async function submitOrder(
       delivery_date: input.deliveryDate,
       payment_method: input.paymentMethod,
       notes: input.notes ? sanitise(input.notes) : null,
-      subtotal: input.subtotal,
+      subtotal: storedSubtotal,
       discount_code: input.discountCode || null,
       discount_amount: verifiedDiscountAmount,
       status: 'pending',
@@ -115,7 +131,7 @@ export async function submitOrder(
           customerEmail: input.customerEmail,
           deliveryDate: input.deliveryDate,
           paymentMethod: input.paymentMethod,
-          subtotal: input.subtotal,
+          subtotal: storedSubtotal,
           discountAmount: verifiedDiscountAmount,
           items: emailItems,
         })
@@ -128,7 +144,7 @@ export async function submitOrder(
       customerAddress: input.customerAddress,
       deliveryDate: input.deliveryDate,
       paymentMethod: input.paymentMethod,
-      subtotal: input.subtotal - verifiedDiscountAmount,
+      subtotal: storedSubtotal - verifiedDiscountAmount,
       notes: input.notes,
       items: emailItems,
     }),

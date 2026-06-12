@@ -26,7 +26,7 @@ export default function GiftBoxBuilder() {
   }
 
   return (
-    <div className="min-h-screen bg-cream pb-20">
+    <div className={`min-h-screen bg-cream ${boxSize ? 'pb-28' : 'pb-20'}`}>
 
       {/* Page header */}
       <div className="bg-ivory border-b border-edge">
@@ -79,7 +79,7 @@ export default function GiftBoxBuilder() {
             transition={{ duration: 0.35 }}
           >
             {/* Mobile tab bar */}
-            <div className="lg:hidden sticky top-0 z-20 flex bg-ivory border-b border-edge">
+            <div className="lg:hidden sticky top-16 z-20 flex bg-ivory border-b border-edge">
               <button
                 onClick={() => setMobileTab('items')}
                 className={tabClass('items')}
@@ -107,7 +107,7 @@ export default function GiftBoxBuilder() {
               <div
                 className={`${mobileTab === 'box' ? 'block' : 'hidden'} lg:block`}
               >
-                <div className="lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto">
+                <div className="lg:sticky lg:top-16 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto">
                   <BoxVisualizer />
                 </div>
               </div>

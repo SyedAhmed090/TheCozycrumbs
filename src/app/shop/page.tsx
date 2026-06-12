@@ -4,9 +4,9 @@ import { Suspense } from 'react'
 export const metadata: Metadata = {
   title: 'Shop',
   description:
-    'Browse fresh cookies, brownies, custom cakes, savoury breads, and gift boxes from The Cozy Crumb. Filter by category and order online.',
+    'Browse fresh cookies, brownies, custom cakes, savoury breads, and gift boxes from The Cozy Crumbs. Filter by category and order online.',
   openGraph: {
-    title: 'Shop | The Cozy Crumb',
+    title: 'Shop | The Cozy Crumbs',
     description: 'Browse our full range of freshly baked treats — cookies, brownies, cakes, savoury breads, and personalised gift boxes.',
   },
 }
@@ -18,10 +18,10 @@ import { getProducts } from '@/lib/supabase/queries'
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>
+  searchParams: Promise<{ category?: string; q?: string }>
 }) {
-  const { category } = await searchParams
-  const products = await getProducts(category)
+  const { category, q } = await searchParams
+  const products = await getProducts(category, q)
 
   return (
     <>
@@ -31,9 +31,9 @@ export default async function ShopPage({
       </Suspense>
       <Suspense
         fallback={
-          <section className="px-20 py-16 bg-cream">
+          <section className="px-4 sm:px-8 lg:px-20 py-10 lg:py-16 bg-cream">
             <p className="text-sm text-muted mb-8">Loading products…</p>
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="bg-white rounded-2xl h-[340px] border border-edge animate-pulse" />
               ))}
@@ -41,7 +41,7 @@ export default async function ShopPage({
           </section>
         }
       >
-        <ProductGrid products={products} />
+        <ProductGrid products={products} q={q} />
       </Suspense>
     </>
   )

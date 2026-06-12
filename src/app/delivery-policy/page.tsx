@@ -4,9 +4,9 @@ import { MapPin, Clock, Package, AlertCircle } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Delivery Policy',
   description:
-    'Delivery areas, charges, and timelines for The Cozy Crumb. We deliver across Karachi with same-day and next-day options available.',
+    'Delivery areas, charges, and timelines for The Cozy Crumbs. We deliver across Karachi with same-day and next-day options available.',
   openGraph: {
-    title: 'Delivery Policy | The Cozy Crumb',
+    title: 'Delivery Policy | The Cozy Crumbs',
     description: 'Delivery areas, charges, and timelines across Karachi. Check if we deliver to your area.',
   },
 }

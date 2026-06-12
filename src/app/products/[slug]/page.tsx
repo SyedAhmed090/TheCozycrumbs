@@ -13,10 +13,10 @@ export async function generateMetadata({
   if (!product) return { title: 'Product Not Found' }
   return {
     title: product.name,
-    description: product.description ?? `Order ${product.name} from The Cozy Crumb — freshly baked and delivered to your door in Karachi.`,
+    description: product.description ?? `Order ${product.name} from The Cozy Crumbs — freshly baked and delivered to your door in Karachi.`,
     openGraph: {
       title: product.name,
-      description: product.description ?? `Order ${product.name} from The Cozy Crumb.`,
+      description: product.description ?? `Order ${product.name} from The Cozy Crumbs.`,
       images: product.images?.[0] ? [{ url: product.images[0], alt: product.name }] : undefined,
     },
   }

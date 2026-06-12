@@ -66,7 +66,7 @@ export default function CheckoutPage() {
   const [submitError, setSubmitError] = useState('')
 
   const [discountCodeInput, setDiscountCodeInput] = useState('')
-  const [discountApplied, setDiscountApplied] = useState<{ code: string; label: string; amount: number } | null>(null)
+  const [discountApplied, setDiscountApplied] = useState<{ code: string; label: string; type: 'percentage' | 'fixed'; value: number } | null>(null)
   const [discountError, setDiscountError] = useState('')
   const [discountLoading, setDiscountLoading] = useState(false)
 
@@ -80,7 +80,13 @@ export default function CheckoutPage() {
 
   const hasNullPrice = cartItems.some((i) => i.price == null)
   const rawSubtotal = mounted ? totalPrice() : 0
-  const discountAmount = discountApplied?.amount ?? 0
+  const discountAmount = useMemo(() => {
+    if (!discountApplied) return 0
+    const amt = discountApplied.type === 'percentage'
+      ? Math.round((rawSubtotal * discountApplied.value) / 100)
+      : discountApplied.value
+    return Math.min(amt, rawSubtotal)
+  }, [discountApplied, rawSubtotal])
   const subtotal = rawSubtotal - discountAmount
 
   async function applyDiscount() {
@@ -90,13 +96,11 @@ export default function CheckoutPage() {
     try {
       const result = await validateDiscount(discountCodeInput.trim(), rawSubtotal)
       if (result.valid) {
-        const amount = result.type === 'percentage'
-          ? Math.round((rawSubtotal * result.value) / 100)
-          : result.value
         setDiscountApplied({
           code: result.code,
           label: result.type === 'percentage' ? `${result.value}% off` : `PKR ${result.value} off`,
-          amount: Math.min(amount, rawSubtotal),
+          type: result.type,
+          value: result.value,
         })
         setDiscountCodeInput('')
       } else {
@@ -113,6 +117,31 @@ export default function CheckoutPage() {
     setDiscountApplied(null)
     setDiscountError('')
   }
+
+  // If the cart changes after a discount was applied (items added/removed in the
+  // drawer), the previously-validated subtotal may no longer satisfy the code's
+  // min_order_amount or other server-side rules. Re-validate against the current
+  // subtotal and clear the discount if it is no longer valid. The min_order_amount
+  // is not returned by validateDiscount, so this re-check is the client-side
+  // enforcement point. discountAmount itself is already derived reactively above.
+  useEffect(() => {
+    if (!discountApplied || !mounted) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const result = await validateDiscount(discountApplied.code, rawSubtotal)
+        if (cancelled) return
+        if (!result.valid) {
+          setDiscountApplied(null)
+          setDiscountError(result.error)
+        }
+      } catch {
+        /* leave the discount in place on transient validation errors */
+      }
+    })()
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawSubtotal, mounted, discountApplied?.code])
 
   function validate(): boolean {
     const newErrors: FormErrors = {}
@@ -132,6 +161,13 @@ export default function CheckoutPage() {
   async function handlePlaceOrder() {
     if (honeypot) return
     if (!validate()) return
+
+    const hasStaleBlobImages = items.some((i) => (i.reference_image_url ?? '').startsWith('blob:'))
+    if (hasStaleBlobImages) {
+      setSubmitError('One or more reference images were lost after page reload. Please re-upload your reference photo before placing the order.')
+      return
+    }
+
     setSubmitting(true)
     setSubmitError('')
 
@@ -170,7 +206,7 @@ export default function CheckoutPage() {
         paymentMethod,
         notes: notes.trim(),
         discountCode: discountApplied?.code,
-        discountAmount: discountApplied?.amount,
+        discountAmount: discountApplied ? discountAmount : undefined,
         subtotal: rawSubtotal,
         items: uploadedItems,
       })
@@ -192,7 +228,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-ivory">
       {/* Top Bar */}
       <div className="bg-cream border-b border-edge px-4 sm:px-8 lg:px-20 py-5 flex items-center justify-between">
-        <span className="font-fraunces text-xl text-chocolate">The Cozy Crumb</span>
+        <span className="font-fraunces text-xl text-chocolate">The Cozy Crumbs</span>
         <div className="flex items-center gap-2">
           <Lock size={14} className="text-muted" />
           <span className="text-sm text-muted">Secure Checkout</span>
@@ -202,7 +238,7 @@ export default function CheckoutPage() {
       {/* Main Grid */}
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-20 py-8 lg:py-14 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-14 items-start">
         {/* Left — Checkout Form */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 order-last lg:order-first">
           {/* Section 1 — Contact & Delivery */}
           <div>
             <h2 className="font-fraunces text-2xl text-chocolate mb-6">Contact &amp; Delivery</h2>
@@ -216,7 +252,7 @@ export default function CheckoutPage() {
                   placeholder="Your full name"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
+                  className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
                 />
                 {errors.customerName && <p className="text-terracotta text-sm mt-1">{errors.customerName}</p>}
               </div>
@@ -230,7 +266,7 @@ export default function CheckoutPage() {
                   placeholder="+92 3XX XXXXXXX"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
+                  className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
                 />
                 {errors.customerPhone && <p className="text-terracotta text-sm mt-1">{errors.customerPhone}</p>}
               </div>
@@ -246,7 +282,7 @@ export default function CheckoutPage() {
                   placeholder="you@example.com"
                   value={customerEmail}
                   onChange={(e) => setCustomerEmail(e.target.value)}
-                  className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
+                  className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
                 />
                 {errors.customerEmail && <p className="text-terracotta text-sm mt-1">{errors.customerEmail}</p>}
               </div>
@@ -260,7 +296,7 @@ export default function CheckoutPage() {
                   rows={3}
                   value={customerAddress}
                   onChange={(e) => setCustomerAddress(e.target.value)}
-                  className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white transition-colors resize-none"
+                  className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink focus:border-caramel outline-none bg-white transition-colors resize-none"
                 />
                 {errors.customerAddress && <p className="text-terracotta text-sm mt-1">{errors.customerAddress}</p>}
               </div>
@@ -273,7 +309,7 @@ export default function CheckoutPage() {
                   min={todayStr}
                   value={deliveryDate}
                   onChange={(e) => setDeliveryDate(e.target.value)}
-                  className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
+                  className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink focus:border-caramel outline-none bg-white transition-colors"
                 />
                 <p className="text-xs text-muted mt-1">Same day before 12pm · Next day before 9pm · Or schedule ahead</p>
                 {errors.deliveryDate && <p className="text-terracotta text-sm mt-1">{errors.deliveryDate}</p>}
@@ -285,7 +321,7 @@ export default function CheckoutPage() {
           <div>
             <h2 className="font-fraunces text-2xl text-chocolate mb-6">Payment Method</h2>
             <div className="bg-white rounded-2xl border border-edge p-8">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* EasyPaisa */}
                 <button
                   type="button"
@@ -352,13 +388,20 @@ export default function CheckoutPage() {
               placeholder="Any special instructions, allergies, or notes..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full border border-edge rounded-xl px-4 py-3 text-sm text-ink resize-none focus:border-caramel outline-none h-24 bg-white"
+              className="w-full border border-edge rounded-xl px-4 py-3 text-base sm:text-sm text-ink resize-none focus:border-caramel outline-none h-24 bg-white"
             />
           </div>
 
           {/* Submit Error */}
           {submitError && (
             <p className="text-terracotta text-sm bg-terracotta/10 border border-terracotta/30 rounded-xl px-4 py-3">{submitError}</p>
+          )}
+
+          {/* Custom-item pricing advisory */}
+          {hasNullPrice && rawSubtotal === 0 && (
+            <div className="bg-caramel/10 border border-caramel/30 rounded-xl px-4 py-3 text-sm text-ink">
+              Your order includes custom items — final pricing will be confirmed by our team.
+            </div>
           )}
 
           {/* Submit Button */}
@@ -377,7 +420,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right — Order Summary */}
-        <div className="sticky top-24">
+        <div className="sticky top-24 order-first lg:order-last">
           <div className="bg-white rounded-2xl border border-edge p-8">
             <h3 className="font-fraunces text-xl text-chocolate mb-6">Order Summary</h3>
 
@@ -424,7 +467,7 @@ export default function CheckoutPage() {
                           <p className="text-xs text-green-600">{discountApplied.label} applied</p>
                         </div>
                       </div>
-                      <button type="button" onClick={removeDiscount} className="text-green-500 hover:text-green-700 transition-colors">
+                      <button type="button" onClick={removeDiscount} aria-label="Remove discount code" className="text-green-500 hover:text-green-700 transition-colors">
                         <X size={14} />
                       </button>
                     </div>
@@ -437,7 +480,7 @@ export default function CheckoutPage() {
                           value={discountCodeInput}
                           onChange={(e) => { setDiscountCodeInput(e.target.value.toUpperCase()); setDiscountError('') }}
                           onKeyDown={(e) => e.key === 'Enter' && applyDiscount()}
-                          className="flex-1 border border-edge rounded-xl px-3 py-2.5 text-sm font-mono text-ink focus:border-caramel outline-none bg-white transition-colors uppercase"
+                          className="flex-1 border border-edge rounded-xl px-3 py-2.5 text-base sm:text-sm font-mono text-ink focus:border-caramel outline-none bg-white transition-colors uppercase"
                         />
                         <button
                           type="button"
@@ -464,7 +507,7 @@ export default function CheckoutPage() {
                   {discountApplied && (
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-green-600">Discount ({discountApplied.code})</span>
-                      <span className="text-sm text-green-600 font-medium">−PKR {discountApplied.amount.toLocaleString()}</span>
+                      <span className="text-sm text-green-600 font-medium">−PKR {discountAmount.toLocaleString()}</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between border-t border-edge pt-2 mt-1">

@@ -24,7 +24,7 @@ function formatDate(dateStr: string): string {
 
 export default function OrderConfirmation({ order }: OrderConfirmationProps) {
   const isEasypaisa = order.payment_method === 'easypaisa'
-  const amountDue = order.subtotal ? Number(order.subtotal) - Number(order.discount_amount ?? 0) : null
+  const amountDue = order.subtotal != null ? Number(order.subtotal) - Number(order.discount_amount ?? 0) : null
 
   const details = [
     { label: 'Delivery Date', value: formatDate(order.delivery_date) },
@@ -58,7 +58,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
       {/* Order ID card */}
       <div className="bg-white rounded-2xl border border-edge px-8 py-5 mb-10">
         <p className="text-xs uppercase tracking-wider text-muted mb-1">Order ID</p>
-        <p className="font-mono text-sm text-ink">{order.id}</p>
+        <p className="font-mono text-sm text-ink break-all">{order.id}</p>
       </div>
 
       {/* EasyPaisa payment instructions */}
@@ -67,7 +67,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
           <p className="font-semibold text-ink mb-2">Complete Your Payment</p>
           <p className="text-sm text-ink leading-relaxed">
             Please send{' '}
-            {amountDue ? (
+            {amountDue != null ? (
               <strong>PKR {amountDue.toLocaleString()}</strong>
             ) : (
               'the confirmed amount'
@@ -80,7 +80,7 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
       )}
 
       {/* Order details grid */}
-      <div className="grid grid-cols-2 gap-x-12 gap-y-6 mb-12 text-left max-w-[480px] w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 mb-12 text-left max-w-[480px] w-full">
         {details.map(({ label, value }) => (
           <div key={label}>
             <p className="text-xs text-muted uppercase tracking-wider mb-1">{label}</p>
@@ -96,6 +96,12 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
           className="px-7 py-3 rounded-full border border-edge text-sm font-semibold text-ink hover:bg-cream transition-colors"
         >
           Back to Home
+        </Link>
+        <Link
+          href={`/track-order?id=${order.id}`}
+          className="px-7 py-3 rounded-full border border-chocolate text-sm font-semibold text-chocolate hover:bg-cream transition-colors"
+        >
+          Track Your Order
         </Link>
         <Link
           href="/shop"

@@ -21,24 +21,24 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://thecozycrumbs.com'),
   title: {
-    default: 'The Cozy Crumb | Freshly Baked Happiness',
-    template: '%s | The Cozy Crumb',
+    default: 'The Cozy Crumbs | Freshly Baked Happiness',
+    template: '%s | The Cozy Crumbs',
   },
   description:
-    'The Cozy Crumb is a premium home bakery in Karachi crafting fresh cookies, brownies, cakes, cupcakes, and gift boxes made with love.',
+    'The Cozy Crumbs is a premium home bakery in Karachi crafting fresh cookies, brownies, cakes, cupcakes, and gift boxes made with love.',
   openGraph: {
     type: 'website',
     locale: 'en_PK',
     url: 'https://thecozycrumbs.com',
-    siteName: 'The Cozy Crumb',
-    title: 'The Cozy Crumb | Freshly Baked Happiness',
+    siteName: 'The Cozy Crumbs',
+    title: 'The Cozy Crumbs | Freshly Baked Happiness',
     description:
       'A premium home bakery in Karachi crafting fresh cookies, brownies, cakes, cupcakes, and gift boxes made with love.',
-    images: [{ url: '/001.jpg', width: 1200, height: 630, alt: 'The Cozy Crumb bakery treats' }],
+    images: [{ url: '/001.jpg', width: 1200, height: 630, alt: 'The Cozy Crumbs bakery treats' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Cozy Crumb | Freshly Baked Happiness',
+    title: 'The Cozy Crumbs | Freshly Baked Happiness',
     description: 'A premium home bakery in Karachi crafting fresh cookies, brownies, cakes, and gift boxes.',
     images: ['/001.jpg'],
   },
@@ -56,7 +56,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pt-[60px] lg:pt-[72px]">{children}</main>
         <Footer />
         <CartDrawer />
       </body>

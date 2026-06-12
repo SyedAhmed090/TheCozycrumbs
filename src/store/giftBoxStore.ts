@@ -1,6 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { BoxSize, FilledSlot } from '@/types'
 
 interface GiftBoxStore {
@@ -13,7 +14,9 @@ interface GiftBoxStore {
   clearBox: () => void
 }
 
-export const useGiftBoxStore = create<GiftBoxStore>((set, get) => ({
+export const useGiftBoxStore = create<GiftBoxStore>()(
+  persist(
+    (set, get) => ({
   boxSize: null,
   slots: [],
 
@@ -49,4 +52,7 @@ export const useGiftBoxStore = create<GiftBoxStore>((set, get) => ({
     }),
 
   clearBox: () => set({ boxSize: null, slots: [] }),
-}))
+    }),
+    { name: 'cozycrumbs-gift-box' }
+  )
+)

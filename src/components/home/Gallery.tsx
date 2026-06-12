@@ -48,14 +48,13 @@ export default function Gallery() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mt-16"
-        style={{ gridAutoRows: '180px' }}
+        className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mt-16 [grid-auto-rows:140px] sm:[grid-auto-rows:160px] lg:[grid-auto-rows:180px]"
       >
         {items.map((item, i) => (
           <motion.div
             key={item.label}
             variants={itemVariants}
-            className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform relative${'gradient' in item ? ` bg-gradient-to-br ${item.gradient} flex items-center justify-center` : ''}${item.rowSpan ? ' row-span-2' : ''}`}
+            className={`rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform relative${'gradient' in item ? ` bg-gradient-to-br ${item.gradient} flex items-center justify-center` : ''}${item.rowSpan ? ' lg:row-span-2' : ''}`}
           >
             {'image' in item ? (
               <Image src={item.image} alt={item.label} fill className="object-cover" />

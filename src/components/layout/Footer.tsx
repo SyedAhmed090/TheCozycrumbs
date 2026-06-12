@@ -2,13 +2,14 @@ import Link from 'next/link'
 import { Camera, MessageCircle, Mail } from 'lucide-react'
 
 const shopLinks = [
-  { label: 'Cookies', href: '/shop/cookies' },
-  { label: 'Brownies', href: '/shop/brownies' },
-  { label: 'Cakes', href: '/shop/cakes' },
-  { label: 'Cupcakes', href: '/shop/cupcakes' },
-  { label: 'Breads', href: '/shop/breads' },
-  { label: 'Pastries', href: '/shop/pastries' },
-  { label: 'Gift Boxes', href: '/shop/gift-boxes' },
+  { label: 'Cookies', href: '/shop?category=cookies' },
+  { label: 'Brownies', href: '/shop?category=brownies' },
+  { label: 'Cakes', href: '/shop?category=cakes' },
+  { label: 'Cupcakes', href: '/shop?category=cupcakes' },
+  { label: 'Breads', href: '/shop?category=breads' },
+  { label: 'Pastries', href: '/shop?category=pastries' },
+  { label: 'Gift Boxes', href: '/shop?category=gift-boxes' },
+  { label: 'Build a Gift Box', href: '/gift-box' },
 ]
 
 const informationLinks = [
@@ -20,6 +21,7 @@ const informationLinks = [
 
 const supportLinks = [
   { label: 'Order Help', href: '/order-help' },
+  { label: 'Track Order', href: '/track-order' },
   { label: 'Terms & Conditions', href: '/terms' },
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Returns', href: '/returns' },
@@ -34,10 +36,10 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="bg-chocolate px-4 sm:px-8 lg:px-20 pt-12 lg:pt-20 pb-8 lg:pb-10">
-      <div className="grid grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-8 lg:gap-14 mb-12 lg:mb-16">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-8 lg:gap-14 mb-12 lg:mb-16">
         {/* Brand */}
-        <div className="col-span-2 lg:col-span-1">
-          <p className="font-fraunces text-2xl text-white mb-3">The Cozy Crumb</p>
+        <div className="col-span-2 md:col-span-1">
+          <p className="font-fraunces text-2xl text-white mb-3">The Cozy Crumbs</p>
           <p className="text-white/50 text-sm leading-relaxed mb-6">
             Freshly baked happiness delivered to your door. Premium home bakery
             in Karachi crafting every treat with love and the finest ingredients.
@@ -102,7 +104,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-[13px] text-white/30">© 2026 The Cozy Crumb. All rights reserved.</p>
+        <p className="text-[13px] text-white/30">© 2026 The Cozy Crumbs. All rights reserved.</p>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 border border-white/10 rounded text-xs text-white/45 font-medium">EasyPaisa</span>
           <span className="px-3 py-1.5 border border-white/10 rounded text-xs text-white/45 font-medium">Cash on Delivery</span>

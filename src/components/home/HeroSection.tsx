@@ -15,9 +15,9 @@ const fadeUp = {
 
 export default function HeroSection() {
   return (
-    <section className="min-h-screen flex flex-col lg:grid lg:grid-cols-2 bg-ivory">
+    <section className="min-h-[70vh] lg:min-h-screen w-full max-w-[1440px] mx-auto flex flex-col lg:grid lg:grid-cols-2 bg-ivory">
       {/* Left column */}
-      <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-20 py-28 lg:py-36">
+      <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-20 py-16 sm:py-20 lg:py-36">
         <motion.div
           custom={0}
           initial="hidden"

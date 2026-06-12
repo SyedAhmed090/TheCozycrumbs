@@ -25,9 +25,36 @@ export const useCartStore = create<CartStore>()(
       isOpen: false,
 
       addItem: (item) =>
-        set((state) => ({
-          items: [...state.items, { ...item, cartId: crypto.randomUUID() }],
-        })),
+        set((state) => {
+          // For standard (non-custom) items, merge into an existing matching
+          // line instead of appending a duplicate line.
+          const isCustom =
+            !!item.reference_image_url ||
+            !!item.custom_message ||
+            !!item.is_gift_box
+          if (!isCustom) {
+            const existing = state.items.find(
+              (i) =>
+                i.product.id === item.product.id &&
+                JSON.stringify(i.variant) === JSON.stringify(item.variant) &&
+                !i.reference_image_url &&
+                !i.custom_message &&
+                !i.is_gift_box
+            )
+            if (existing) {
+              return {
+                items: state.items.map((i) =>
+                  i.cartId === existing.cartId
+                    ? { ...i, quantity: i.quantity + (item.quantity ?? 1) }
+                    : i
+                ),
+              }
+            }
+          }
+          return {
+            items: [...state.items, { ...item, cartId: crypto.randomUUID() }],
+          }
+        }),
 
       removeItem: (cartId) =>
         set((state) => ({
@@ -36,9 +63,14 @@ export const useCartStore = create<CartStore>()(
 
       updateQuantity: (cartId, quantity) =>
         set((state) => ({
-          items: state.items.map((i) =>
-            i.cartId === cartId ? { ...i, quantity } : i
-          ),
+          // When quantity drops to 0 or below, remove the line entirely;
+          // otherwise floor it at 1 so totals stay valid.
+          items:
+            quantity <= 0
+              ? state.items.filter((i) => i.cartId !== cartId)
+              : state.items.map((i) =>
+                  i.cartId === cartId ? { ...i, quantity } : i
+                ),
         })),
 
       clearCart: () => set({ items: [] }),

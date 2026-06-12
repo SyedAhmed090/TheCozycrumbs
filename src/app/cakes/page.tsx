@@ -4,7 +4,7 @@ import CakeGallery from '@/components/cakes/CakeGallery'
 import CakeFAQ from '@/components/cakes/CakeFAQ'
 
 export const metadata = {
-  title: 'Custom Cakes — The Cozy Crumb',
+  title: 'Custom Cakes — The Cozy Crumbs',
   description: 'Design your perfect custom cake. Choose flavor, size, shape, frosting and more.',
 }
 

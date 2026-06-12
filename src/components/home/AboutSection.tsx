@@ -35,7 +35,7 @@ export default function AboutSection() {
           </motion.h2>
 
           <motion.p {...fadeUp(0.18)} className="text-base text-muted leading-[1.7] mb-5">
-            The Cozy Crumb began as a love letter to homemade baking — a small kitchen, a big passion, and a belief that the best things are made with time and care.
+            The Cozy Crumbs began as a love letter to homemade baking — a small kitchen, a big passion, and a belief that the best things are made with time and care.
           </motion.p>
 
           <motion.p {...fadeUp(0.26)} className="text-base text-muted leading-[1.7]">
@@ -45,7 +45,7 @@ export default function AboutSection() {
           <motion.div {...fadeUp(0.34)} className="mt-9 pt-7 border-t border-edge">
             <span className="font-fraunces text-xl italic text-chocolate">Tooba Arsal</span>
             <span className="text-xs text-muted font-medium font-inter mt-1 block">
-              Founder & Head Baker, The Cozy Crumb
+              Founder & Head Baker, The Cozy Crumbs
             </span>
           </motion.div>
         </div>

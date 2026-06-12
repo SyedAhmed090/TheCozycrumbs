@@ -39,7 +39,7 @@ export default function CakeFAQ() {
   }
 
   return (
-    <section className="bg-cream py-20 px-20">
+    <section className="bg-cream py-12 lg:py-20 px-4 sm:px-8 lg:px-20">
       <div className="max-w-[800px] mx-auto">
         <div className="text-center mb-12">
           <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-4 flex items-center justify-center gap-3">
@@ -47,15 +47,20 @@ export default function CakeFAQ() {
             Questions?
             <span className="w-8 h-px bg-caramel" />
           </p>
-          <h2 className="font-fraunces text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
+          <h2 className="font-fraunces text-[28px] sm:text-[36px] lg:text-[46px] font-normal text-chocolate tracking-[-1.2px] leading-[1.1]">
             Frequently Asked Questions
           </h2>
         </div>
 
         <div>
           {FAQS.map((faq, i) => (
-            <div key={faq.q} className="border-b border-edge py-5 cursor-pointer" onClick={() => toggle(i)}>
-              <div className="flex items-center justify-between font-medium text-ink text-[15px]">
+            <div key={faq.q} className="border-b border-edge py-5">
+              <button
+                type="button"
+                className="w-full flex items-center justify-between font-medium text-ink text-[15px] text-left"
+                onClick={() => toggle(i)}
+                aria-expanded={openIndex === i}
+              >
                 <span>{faq.q}</span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
@@ -64,7 +69,7 @@ export default function CakeFAQ() {
                 >
                   <ChevronDown size={18} className="text-muted" />
                 </motion.div>
-              </div>
+              </button>
 
               <AnimatePresence initial={false}>
                 {openIndex === i && (

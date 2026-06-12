@@ -4,7 +4,7 @@ import { Edit, XCircle } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'How to Order',
   description:
-    'Step-by-step guide to placing an order at The Cozy Crumb. Browse, add to cart, choose delivery, and pay via EasyPaisa or Cash on Delivery.',
+    'Step-by-step guide to placing an order at The Cozy Crumbs. Browse, add to cart, choose delivery, and pay via EasyPaisa or Cash on Delivery.',
 }
 
 const STEPS = [

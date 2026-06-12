@@ -9,12 +9,23 @@ function hasEnvVars(): boolean {
   )
 }
 
-/** Get all available products, optionally filtered by category. */
-export async function getProducts(category?: string): Promise<Product[]> {
-  if (!hasEnvVars()) {
-    const fallback = DUMMY_PRODUCTS.filter((p) => p.is_available)
-    return category ? fallback.filter((p) => p.category === category) : fallback
+/** Get all available products, optionally filtered by category and/or search query. */
+export async function getProducts(category?: string, q?: string): Promise<Product[]> {
+  function applyLocalFilters(products: Product[]) {
+    let result = products.filter((p) => p.is_available)
+    if (category) result = result.filter((p) => p.category === category)
+    if (q) {
+      const lower = q.toLowerCase()
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(lower) ||
+          (p.description?.toLowerCase().includes(lower) ?? false)
+      )
+    }
+    return result
   }
+
+  if (!hasEnvVars()) return applyLocalFilters(DUMMY_PRODUCTS)
 
   try {
     const supabase = await createClient()
@@ -24,22 +35,16 @@ export async function getProducts(category?: string): Promise<Product[]> {
       .eq('is_available', true)
       .order('sort_order', { ascending: true })
 
-    if (category) {
-      query = query.eq('category', category)
-    }
+    if (category) query = query.eq('category', category)
+    if (q) query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`)
 
     const { data, error } = await query
 
     if (error) throw error
-    // If DB is empty, fall back to seed data so the site stays functional
-    if (!data || data.length === 0) {
-      const fallback = DUMMY_PRODUCTS.filter((p) => p.is_available)
-      return category ? fallback.filter((p) => p.category === category) : fallback
-    }
+    if (!data || data.length === 0) return applyLocalFilters(DUMMY_PRODUCTS)
     return data as Product[]
   } catch {
-    const fallback = DUMMY_PRODUCTS.filter((p) => p.is_available)
-    return category ? fallback.filter((p) => p.category === category) : fallback
+    return applyLocalFilters(DUMMY_PRODUCTS)
   }
 }
 

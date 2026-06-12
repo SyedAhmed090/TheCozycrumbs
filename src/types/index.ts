@@ -62,6 +62,7 @@ export type CartItem = {
   custom_message?: string
   reference_image_url?: string
   price: number | null
+  delivery_date?: string
   is_gift_box?: boolean
   box_size?: BoxSize
   box_contents?: FilledSlot[]

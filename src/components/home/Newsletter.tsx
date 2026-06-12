@@ -30,7 +30,11 @@ export default function Newsletter() {
     setError('')
     setLoading(true)
     try {
-      await subscribeNewsletter(trimmed)
+      const result = await subscribeNewsletter(trimmed)
+      if (!result.success) {
+        setError(result.error)
+        return
+      }
       setSubmitted(true)
       setEmail('')
     } catch {
@@ -73,6 +77,8 @@ export default function Newsletter() {
             <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"
+                name="email"
+                aria-label="Email address"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setError('') }}
                 placeholder="Your email address"
@@ -81,7 +87,7 @@ export default function Newsletter() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-chocolate text-white rounded-full px-8 py-4 font-semibold text-sm hover:bg-chocolate-dark transition-all hover:-translate-y-0.5 hover:shadow-lg whitespace-nowrap disabled:opacity-70 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto bg-chocolate text-white rounded-full px-8 py-4 font-semibold text-sm hover:bg-chocolate-dark transition-all hover:-translate-y-0.5 hover:shadow-lg whitespace-nowrap disabled:opacity-70 flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : 'Subscribe'}
               </button>

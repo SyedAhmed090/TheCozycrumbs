@@ -20,7 +20,7 @@ const NAV = [
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-50 pt-[68px] lg:pt-[88px]">
+    <div className="min-h-screen bg-gray-50">
       <div className="bg-chocolate text-white px-4 sm:px-8 py-3 flex items-center justify-between text-sm overflow-x-auto">
         <Link href="/admin/orders" className="font-fraunces text-lg text-white hover:text-caramel transition-colors flex-shrink-0 mr-6">
           Cozy Crumb Admin

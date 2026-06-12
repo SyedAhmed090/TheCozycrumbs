@@ -62,9 +62,11 @@ export default function ItemCard({ item }: { item: GiftBoxItem }) {
           onClick={() => removeLast(item.id)}
           disabled={count === 0}
           aria-label={`Remove ${item.name} from box`}
-          className="w-7 h-7 rounded-full border border-edge flex items-center justify-center hover:bg-beige disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="w-11 h-11 flex items-center justify-center disabled:cursor-not-allowed group"
         >
-          <Minus size={12} className="text-ink" />
+          <span className="w-7 h-7 rounded-full border border-edge flex items-center justify-center group-hover:bg-beige group-disabled:opacity-30 transition-colors">
+            <Minus size={12} className="text-ink" />
+          </span>
         </button>
 
         <span className="font-inter text-sm font-medium text-ink w-5 text-center select-none">
@@ -75,13 +77,17 @@ export default function ItemCard({ item }: { item: GiftBoxItem }) {
           onClick={handleAdd}
           disabled={isFull}
           aria-label={`Add ${item.name} to box`}
-          className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
-            isFull
-              ? 'bg-beige cursor-not-allowed opacity-40'
-              : 'bg-chocolate hover:bg-chocolate-dark'
-          }`}
+          className="w-11 h-11 flex items-center justify-center disabled:cursor-not-allowed group"
         >
-          <Plus size={12} className={isFull ? 'text-muted' : 'text-white'} />
+          <span
+            className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+              isFull
+                ? 'bg-beige opacity-40'
+                : 'bg-chocolate group-hover:bg-chocolate-dark'
+            }`}
+          >
+            <Plus size={12} className={isFull ? 'text-muted' : 'text-white'} />
+          </span>
         </button>
       </div>
     </motion.div>

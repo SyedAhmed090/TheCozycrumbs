@@ -2,7 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { useGiftBoxStore } from '@/store/giftBoxStore'
+import { GIFT_BOX_ITEMS } from '@/lib/data/products'
 import type { BoxSize } from '@/types'
+
+const MIN_UNIT_PRICE = Math.min(...GIFT_BOX_ITEMS.map((i) => i.unit_price))
 
 const CARD_INITIAL = { opacity: 0, y: 24 }
 const CARD_ANIMATE = { opacity: 1, y: 0 }
@@ -15,9 +18,9 @@ const OPTIONS: Array<{
   minPrice: number
   cols: number
 }> = [
-  { size: 4,  label: '4-Pack',  tagline: 'A sweet little gesture',   minPrice: 340,  cols: 2 },
-  { size: 6,  label: '6-Pack',  tagline: 'The classic gift box',     minPrice: 510,  cols: 3 },
-  { size: 12, label: '12-Pack', tagline: 'The ultimate treat spread', minPrice: 1020, cols: 4 },
+  { size: 4,  label: '4-Pack',  tagline: 'A sweet little gesture',   minPrice: 4 * MIN_UNIT_PRICE,  cols: 2 },
+  { size: 6,  label: '6-Pack',  tagline: 'The classic gift box',     minPrice: 6 * MIN_UNIT_PRICE,  cols: 3 },
+  { size: 12, label: '12-Pack', tagline: 'The ultimate treat spread', minPrice: 12 * MIN_UNIT_PRICE, cols: 4 },
 ]
 
 export default function BoxSizeSelector() {

@@ -104,6 +104,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
       variant,
       custom_message: message || undefined,
       price: product.base_price,
+      delivery_date: date,
     })
     openDrawer()
   }
@@ -111,7 +112,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
   return (
     <div className="bg-ivory min-h-screen">
       {/* Breadcrumb */}
-      <nav className="px-4 sm:px-8 lg:px-20 pt-8 pb-0 flex items-center gap-2 text-sm text-muted">
+      <nav className="px-4 sm:px-8 lg:px-20 pt-8 pb-0 flex items-center gap-2 text-sm text-muted min-w-0 overflow-hidden">
         <Link href="/" className="hover:text-chocolate transition-colors">Home</Link>
         <ChevronRight size={14} className="flex-shrink-0" />
         <Link href="/shop" className="hover:text-chocolate transition-colors">Shop</Link>
@@ -123,7 +124,7 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
           {categoryLabel(product.category)}
         </Link>
         <ChevronRight size={14} className="flex-shrink-0" />
-        <span className="text-ink font-medium truncate">{product.name}</span>
+        <span className="text-ink font-medium truncate min-w-0">{product.name}</span>
       </nav>
 
       {/* Main grid */}
@@ -143,14 +144,24 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
             </span>
           </div>
 
-          <div className="flex gap-3 mt-4">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-[100px] h-[100px] rounded-xl cursor-pointer border-2 border-transparent hover:border-chocolate transition-all flex-shrink-0"
-                style={{ background: `linear-gradient(135deg, ${gradient.from}, ${gradient.to})` }}
-              />
-            ))}
+          <div className="flex gap-3 mt-4 overflow-x-auto">
+            {product.images && product.images.length > 0
+              ? product.images.slice(0, 3).map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt={`${product.name} view ${i + 1}`}
+                    className="w-20 h-20 sm:w-[100px] sm:h-[100px] rounded-xl object-cover cursor-pointer border-2 border-transparent hover:border-chocolate transition-all flex-shrink-0"
+                  />
+                ))
+              : [0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    aria-hidden="true"
+                    className="w-20 h-20 sm:w-[100px] sm:h-[100px] rounded-xl border-2 border-transparent transition-all flex-shrink-0"
+                    style={{ background: `linear-gradient(135deg, ${gradient.from}, ${gradient.to})` }}
+                  />
+                ))}
           </div>
         </div>
 
@@ -228,16 +239,18 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
             <div className="flex items-center gap-4 border border-edge rounded-full px-2 py-1 w-fit">
               <button
                 type="button"
+                aria-label="Decrease quantity"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-chocolate hover:bg-beige transition-colors text-lg font-medium"
+                className="w-11 h-11 rounded-full flex items-center justify-center text-chocolate hover:bg-beige transition-colors text-lg font-medium"
               >
                 −
               </button>
               <span className="w-6 text-center text-sm font-semibold text-ink">{quantity}</span>
               <button
                 type="button"
-                onClick={() => setQuantity((q) => q + 1)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-chocolate hover:bg-beige transition-colors text-lg font-medium"
+                aria-label="Increase quantity"
+                onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+                className="w-11 h-11 rounded-full flex items-center justify-center text-chocolate hover:bg-beige transition-colors text-lg font-medium"
               >
                 +
               </button>

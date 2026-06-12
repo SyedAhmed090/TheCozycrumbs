@@ -10,12 +10,12 @@ type GalleryItem = {
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  { gradient: 'from-[#F0D4B8] to-[#E0BF9A]', label: 'Vanilla Birthday Cake', textColor: 'text-chocolate/50', className: 'row-span-2 h-[480px]' },
-  { gradient: 'from-[#6B3A2A] to-[#4A2818]', label: 'Chocolate Ganache', textColor: 'text-white/50', className: 'h-[220px]' },
-  { gradient: 'from-[#D97A52] to-[#BF6038]', label: 'Red Velvet Celebration', textColor: 'text-white/60', className: 'h-[220px]' },
-  { gradient: 'from-[#E8C4A4] to-[#D4A07A]', label: 'Caramel Drip Cake', textColor: 'text-chocolate/50', className: 'h-[220px]' },
-  { gradient: 'from-[#F2D4B8] to-[#E4BF9A]', label: 'Tiered Wedding Cake', textColor: 'text-chocolate/50', className: 'row-span-2 h-[480px]' },
-  { gradient: 'from-[#C49060] to-[#A87840]', label: 'Custom Birthday', textColor: 'text-white/60', className: 'h-[220px]' },
+  { gradient: 'from-[#F0D4B8] to-[#E0BF9A]', label: 'Vanilla Birthday Cake', textColor: 'text-chocolate/50', className: 'row-span-2 aspect-[3/4]' },
+  { gradient: 'from-[#6B3A2A] to-[#4A2818]', label: 'Chocolate Ganache', textColor: 'text-white/50', className: 'aspect-square' },
+  { gradient: 'from-[#D97A52] to-[#BF6038]', label: 'Red Velvet Celebration', textColor: 'text-white/60', className: 'aspect-square' },
+  { gradient: 'from-[#E8C4A4] to-[#D4A07A]', label: 'Caramel Drip Cake', textColor: 'text-chocolate/50', className: 'aspect-square' },
+  { gradient: 'from-[#F2D4B8] to-[#E4BF9A]', label: 'Tiered Wedding Cake', textColor: 'text-chocolate/50', className: 'row-span-2 aspect-[3/4]' },
+  { gradient: 'from-[#C49060] to-[#A87840]', label: 'Custom Birthday', textColor: 'text-white/60', className: 'aspect-square' },
 ]
 
 function fadeUp(delay = 0) {
@@ -44,7 +44,6 @@ export default function CakeGallery() {
       <motion.div
         {...fadeUp(0.1)}
         className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
-        style={{ gridAutoRows: 'min-content' }}
       >
         {GALLERY_ITEMS.map((item) => (
           <div

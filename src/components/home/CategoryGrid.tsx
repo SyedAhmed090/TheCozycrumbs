@@ -9,16 +9,16 @@ interface Category {
   gradientFrom: string
   gradientTo: string
   colSpanClass: string
-  height: number
+  aspectClass: string
   href: string
 }
 
 const categories: Category[] = [
-  { name: 'Cakes',         tagline: 'Three Milk & more',  gradientFrom: '#E8C4A4', gradientTo: '#D09A74', colSpanClass: 'col-span-2',              height: 280, href: '/shop/cakes' },
-  { name: 'Brownies',      tagline: '5 fudgy flavours',   gradientFrom: '#6B3A2A', gradientTo: '#4A2818', colSpanClass: 'col-span-1',              height: 280, href: '/shop/brownies' },
-  { name: 'Chicken Bakes', tagline: 'Bread & buns',       gradientFrom: '#C49060', gradientTo: '#A87840', colSpanClass: 'col-span-1',              height: 280, href: '/shop/breads' },
-  { name: 'Nankhatai',     tagline: 'Classic & cardamom', gradientFrom: '#D4A574', gradientTo: '#C08055', colSpanClass: 'col-span-1',              height: 240, href: '/shop/cookies' },
-  { name: 'Savory',        tagline: 'Pasta made fresh',   gradientFrom: '#8B9B6B', gradientTo: '#6B7B4B', colSpanClass: 'col-span-2 lg:col-span-3', height: 240, href: '/shop/savory' },
+  { name: 'Cakes',         tagline: 'Three Milk & more',  gradientFrom: '#E8C4A4', gradientTo: '#D09A74', colSpanClass: 'col-span-2',              aspectClass: 'aspect-[4/3]', href: '/shop/cakes' },
+  { name: 'Brownies',      tagline: '5 fudgy flavours',   gradientFrom: '#6B3A2A', gradientTo: '#4A2818', colSpanClass: 'col-span-1',              aspectClass: 'aspect-[4/3]', href: '/shop/brownies' },
+  { name: 'Chicken Bakes', tagline: 'Bread & buns',       gradientFrom: '#C49060', gradientTo: '#A87840', colSpanClass: 'col-span-1',              aspectClass: 'aspect-[4/3]', href: '/shop/breads' },
+  { name: 'Nankhatai',     tagline: 'Classic & cardamom', gradientFrom: '#D4A574', gradientTo: '#C08055', colSpanClass: 'col-span-1',              aspectClass: 'aspect-[5/3]', href: '/shop/cookies' },
+  { name: 'Savory',        tagline: 'Pasta made fresh',   gradientFrom: '#8B9B6B', gradientTo: '#6B7B4B', colSpanClass: 'col-span-2 lg:col-span-3', aspectClass: 'aspect-[5/3]', href: '/shop/savory' },
 ]
 
 const fadeUp = {
@@ -59,15 +59,18 @@ export default function CategoryGrid() {
 
 function CategoryCard({ cat, index }: { cat: Category; index: number }) {
   return (
-    <Link href={cat.href} className={cat.colSpanClass}>
+    <Link
+      href={cat.href}
+      className={cat.colSpanClass}
+      aria-label={`Shop ${cat.name} — ${cat.tagline}`}
+    >
       <motion.div
         custom={index}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
-        className="w-full group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300"
-        style={{ height: cat.height }}
+        className={`w-full ${cat.aspectClass} group rounded-2xl overflow-hidden cursor-pointer relative flex items-end hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(90,62,43,0.15)] transition-all duration-300`}
       >
         <div
           className="absolute inset-0 transition-transform duration-[400ms] group-hover:scale-[1.04]"

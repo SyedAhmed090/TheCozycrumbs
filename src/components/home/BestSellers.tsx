@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
@@ -13,6 +14,7 @@ const CATEGORY_GRADIENTS: Record<string, { from: string; to: string; light: bool
   cakes:        { from: '#F0D4B8', to: '#E0BF9A', light: false },
   cupcakes:     { from: '#D97A52', to: '#BF6038', light: true  },
   breads:       { from: '#C49060', to: '#A87840', light: true  },
+  savory:       { from: '#8B9B6B', to: '#6B7B4B', light: true  },
   pastries:     { from: '#DCBCA0', to: '#C8A480', light: false },
   'gift-boxes': { from: '#C89B6D', to: '#B08958', light: false },
 }
@@ -28,14 +30,26 @@ const fadeUp = {
   }),
 }
 
+const VARIANT_REQUIRED_CATEGORIES = ['cakes', 'cupcakes']
+
 export default function BestSellers({ products }: { products: Product[] }) {
   const { addItem, openDrawer } = useCartStore()
+  const router = useRouter()
 
   const handleQuickAdd = useCallback((e: React.MouseEvent, product: Product) => {
     e.preventDefault()
+    // Categories with required variant selections (shape, frosting, delivery date,
+    // etc.) cannot be safely added from the quick-add button — send the user to the
+    // product page to make those selections instead.
+    if (VARIANT_REQUIRED_CATEGORIES.includes(product.category)) {
+      router.push(`/products/${product.slug}`)
+      return
+    }
     addItem({ product, quantity: 1, variant: {}, price: product.base_price })
     openDrawer()
-  }, [addItem, openDrawer])
+  }, [addItem, openDrawer, router])
+
+  if (products.length === 0) return null
 
   return (
     <section className="bg-cream py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
@@ -62,15 +76,16 @@ export default function BestSellers({ products }: { products: Product[] }) {
           const categoryLabel = product.category.replaceAll('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
           return (
-            <Link href={`/products/${product.slug}`} key={product.id}>
-              <motion.div
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={VIEWPORT_ONCE}
-                variants={fadeUp}
-                className="group bg-white rounded-2xl overflow-hidden border border-edge cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(90,62,43,0.11)] transition-all duration-300 relative"
-              >
+            <motion.div
+              key={product.id}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_ONCE}
+              variants={fadeUp}
+              className="group bg-white rounded-2xl overflow-hidden border border-edge hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(90,62,43,0.11)] transition-all duration-300 relative"
+            >
+              <Link href={`/products/${product.slug}`} className="block cursor-pointer">
                 <div className="h-[230px] overflow-hidden" style={{ background: `linear-gradient(135deg, ${gradient.from}, ${gradient.to})` }}>
                   <div className="w-full h-full transition-transform duration-500 group-hover:scale-105 flex items-center justify-center">
                     <span className="font-fraunces italic text-sm" style={{ color: gradient.light ? 'rgba(255,255,255,0.35)' : 'rgba(90,62,43,0.3)' }}>
@@ -89,15 +104,15 @@ export default function BestSellers({ products }: { products: Product[] }) {
                     <span className="text-[12px] text-caramel">★★★★★</span>
                   </div>
                 </div>
-                <button
-                  onClick={(e) => handleQuickAdd(e, product)}
-                  className="absolute bottom-6 right-6 w-[38px] h-[38px] rounded-full bg-chocolate flex items-center justify-center text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-                  aria-label={`Add ${product.name} to cart`}
-                >
-                  <Plus size={16} strokeWidth={2.5} />
-                </button>
-              </motion.div>
-            </Link>
+              </Link>
+              <button
+                onClick={(e) => handleQuickAdd(e, product)}
+                className="absolute bottom-6 right-6 w-11 h-11 rounded-full bg-chocolate flex items-center justify-center text-white translate-y-0 transition-all duration-300 lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0"
+                aria-label={`Add ${product.name} to cart`}
+              >
+                <Plus size={16} strokeWidth={2.5} />
+              </button>
+            </motion.div>
           )
         })}
       </div>

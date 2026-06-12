@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Returns & Refunds',
-  description: 'The Cozy Crumb returns and refunds policy. Learn when refunds are offered and how to request one for your order.',
+  description: 'The Cozy Crumbs returns and refunds policy. Learn when refunds are offered and how to request one for your order.',
 }
 
 const REFUND_YES = [

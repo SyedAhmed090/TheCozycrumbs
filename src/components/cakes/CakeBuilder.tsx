@@ -31,6 +31,8 @@ const FROSTINGS = [
   'Whipped Cream', 'Swiss Meringue', 'Fondant', 'No Frosting',
 ]
 
+const MAX_QTY = 10
+
 const MOCK_PRODUCT: Product = {
   id: 'custom-cake',
   name: 'Custom Cake',
@@ -151,6 +153,7 @@ export default function CakeBuilder() {
       e.target.value = ''
       return
     }
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
     const url = URL.createObjectURL(file)
     setPreviewUrl(url)
   }
@@ -172,13 +175,14 @@ export default function CakeBuilder() {
       },
       custom_message: message || undefined,
       reference_image_url: previewUrl || undefined,
+      delivery_date: deliveryDate || undefined,
       price: null,
     })
     openDrawer()
   }
 
   return (
-    <section id="cake-builder" className="bg-ivory py-12 lg:py-20 px-4 sm:px-8 lg:px-20">
+    <section id="cake-builder" className="bg-ivory py-12 lg:py-20 px-4 sm:px-8 lg:px-20 scroll-mt-16">
       <div className="text-center mb-14">
         <p className="text-[11px] font-semibold tracking-[2.5px] uppercase text-caramel mb-4 flex items-center justify-center gap-3">
           <span className="w-8 h-px bg-caramel" />
@@ -319,15 +323,38 @@ export default function CakeBuilder() {
 
               <div>
                 <div
-                  className="border-2 border-dashed border-edge rounded-xl p-6 text-center cursor-pointer hover:border-caramel transition-colors"
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Upload a reference image"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      fileInputRef.current?.click()
+                    }
+                  }}
+                  className="border-2 border-dashed border-edge rounded-xl p-6 text-center cursor-pointer hover:border-caramel transition-colors focus:outline-none focus:ring-2 focus:ring-caramel"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt="Reference"
-                      className="mx-auto max-h-40 rounded-lg object-cover"
-                    />
+                    <>
+                      <img
+                        src={previewUrl}
+                        alt="Reference"
+                        className="mx-auto max-h-40 rounded-lg object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (previewUrl) URL.revokeObjectURL(previewUrl)
+                          setPreviewUrl(null)
+                          if (fileInputRef.current) fileInputRef.current.value = ''
+                        }}
+                        className="mt-2 text-xs text-muted underline"
+                      >
+                        Remove image
+                      </button>
+                    </>
                   ) : (
                     <>
                       <ImagePlus size={24} className="text-muted mx-auto mb-2" />
@@ -386,8 +413,9 @@ export default function CakeBuilder() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="w-10 h-10 rounded-full border border-edge text-ink font-semibold hover:border-chocolate transition-colors flex items-center justify-center text-lg"
+                    onClick={() => setQuantity((q) => Math.min(MAX_QTY, q + 1))}
+                    disabled={quantity >= MAX_QTY}
+                    className="w-10 h-10 rounded-full border border-edge text-ink font-semibold hover:border-chocolate transition-colors flex items-center justify-center text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-edge"
                   >
                     +
                   </button>
@@ -398,7 +426,7 @@ export default function CakeBuilder() {
         </div>
 
         {/* Right — Preview Card */}
-        <div className="lg:sticky lg:top-24">
+        <div className="lg:sticky lg:top-20">
           <div className="bg-white rounded-2xl border border-edge p-8">
             <div className="h-48 rounded-xl bg-gradient-to-br from-[#F0D4B8] to-[#E0BF9A] flex items-center justify-center mb-6">
               <span className="font-fraunces italic text-chocolate/40 text-sm text-center px-4">

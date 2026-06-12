@@ -5,10 +5,10 @@ import { MessageCircle, Camera, Mail, Clock, MapPin } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Contact Us',
   description:
-    'Get in touch with The Cozy Crumb via WhatsApp, Instagram, or email. We handle custom cake inquiries, bulk orders, and general questions.',
+    'Get in touch with The Cozy Crumbs via WhatsApp, Instagram, or email. We handle custom cake inquiries, bulk orders, and general questions.',
   openGraph: {
-    title: 'Contact Us | The Cozy Crumb',
-    description: 'Reach The Cozy Crumb on WhatsApp for orders and custom cakes, or via Instagram and email.',
+    title: 'Contact Us | The Cozy Crumbs',
+    description: 'Reach The Cozy Crumbs on WhatsApp for orders and custom cakes, or via Instagram and email.',
   },
 }
 
@@ -40,9 +40,9 @@ export default function ContactPage() {
       </section>
 
       <section className="bg-cream py-16 lg:py-24 px-4 sm:px-8 lg:px-20">
-        <div className="max-w-[960px] mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="max-w-[960px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {CONTACT_METHODS.map((m) => (
-            <div key={m.label} className={`rounded-2xl border p-8 flex flex-col ${m.cardClass}`}>
+            <div key={m.label} className={`rounded-2xl border p-6 sm:p-8 flex flex-col ${m.cardClass}`}>
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${m.iconClass}`}>
                 <m.icon size={22} />
               </div>
