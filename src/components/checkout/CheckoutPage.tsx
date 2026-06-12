@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Lock, ArrowRight, Loader2, CheckCircle, Tag, X } from 'lucide-react'
@@ -72,8 +72,14 @@ export default function CheckoutPage() {
 
   const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
-  const hasNullPrice = items.some((i) => i.price == null)
-  const rawSubtotal = totalPrice()
+  // Cart comes from localStorage — render it only after mount so the first
+  // client render matches the server HTML (avoids hydration mismatch)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const cartItems = mounted ? items : []
+
+  const hasNullPrice = cartItems.some((i) => i.price == null)
+  const rawSubtotal = mounted ? totalPrice() : 0
   const discountAmount = discountApplied?.amount ?? 0
   const subtotal = rawSubtotal - discountAmount
 
@@ -359,7 +365,7 @@ export default function CheckoutPage() {
           <button
             type="button"
             onClick={handlePlaceOrder}
-            disabled={submitting || items.length === 0}
+            disabled={submitting || cartItems.length === 0}
             className="w-full bg-chocolate text-white rounded-full py-4 font-semibold text-base hover:bg-chocolate-dark transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
@@ -375,7 +381,7 @@ export default function CheckoutPage() {
           <div className="bg-white rounded-2xl border border-edge p-8">
             <h3 className="font-fraunces text-xl text-chocolate mb-6">Order Summary</h3>
 
-            {items.length === 0 ? (
+            {cartItems.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-muted text-sm mb-4">Your cart is empty</p>
                 <Link href="/shop" className="text-sm font-semibold text-chocolate hover:text-chocolate-dark transition-colors">
@@ -386,7 +392,7 @@ export default function CheckoutPage() {
               <>
                 {/* Items list */}
                 <div className="max-h-80 overflow-y-auto flex flex-col gap-4 pr-1">
-                  {items.map((item) => {
+                  {cartItems.map((item) => {
                     const variantParts = [item.variant.flavor, item.variant.weight, item.variant.shape, item.variant.frosting].filter(Boolean)
                     return (
                       <div key={item.cartId} className="flex gap-3">

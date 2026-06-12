@@ -1,8 +1,12 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/email'
 import { validateOrderInput, sanitise, type OrderInput } from '@/lib/validation/orders'
+
+// order_items.product_id is a uuid FK; custom cakes and gift boxes use
+// synthetic ids ('custom-cake', 'gift-box-6') that must not reach the column.
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 export async function submitOrder(
   input: OrderInput
@@ -12,7 +16,9 @@ export async function submitOrder(
     return { success: false, error: errors[0].message }
   }
 
-  const supabase = await createClient()
+  // Service role: anon has no SELECT policy on orders (migration 003), which
+  // would make insert().select() fail, and cannot update discount used_count.
+  const supabase = createAdminClient()
 
   // Validate discount code server-side if provided
   let verifiedDiscountAmount = 0
@@ -24,7 +30,11 @@ export async function submitOrder(
       .eq('is_active', true)
       .single()
 
-    if (discount) {
+    const expired = discount?.expires_at && new Date(discount.expires_at).getTime() < Date.now()
+    const usedUp = discount?.max_uses != null && (discount.used_count ?? 0) >= discount.max_uses
+    const belowMin = discount != null && input.subtotal < (discount.min_order_amount ?? 0)
+
+    if (discount && !expired && !usedUp && !belowMin) {
       if (discount.discount_type === 'percentage') {
         verifiedDiscountAmount = Math.round((input.subtotal * discount.discount_value) / 100)
       } else {
@@ -58,7 +68,7 @@ export async function submitOrder(
 
   const orderItems = input.items.map((item) => ({
     order_id: order.id,
-    product_id: item.productId,
+    product_id: UUID_RE.test(item.productId) ? item.productId : null,
     product_name: sanitise(item.productName),
     quantity: item.quantity,
     variant: item.variant,
@@ -69,6 +79,8 @@ export async function submitOrder(
 
   const { error: itemsError } = await supabase.from('order_items').insert(orderItems)
   if (itemsError) {
+    // Don't leave an orphan order behind if its items couldn't be saved
+    await supabase.from('orders').delete().eq('id', order.id)
     return { success: false, error: itemsError.message }
   }
 

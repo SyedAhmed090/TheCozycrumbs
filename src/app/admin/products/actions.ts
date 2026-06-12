@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 
 function slugify(name: string) {
   return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -23,6 +24,7 @@ function parseFormData(formData: FormData) {
 }
 
 export async function createProduct(formData: FormData) {
+  await requireAdmin()
   const { name, ...rest } = parseFormData(formData)
   const slug = slugify(name)
   const supabase = createAdminClient()
@@ -33,6 +35,7 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
+  await requireAdmin()
   let dbError: string | null = null
 
   try {
@@ -54,6 +57,7 @@ export async function updateProduct(id: string, formData: FormData) {
 }
 
 export async function toggleProductAvailability(id: string, currentValue: boolean) {
+  await requireAdmin()
   const supabase = createAdminClient()
   const { error } = await supabase.from('products').update({ is_available: !currentValue }).eq('id', id)
   if (error) throw new Error(error.message)
@@ -61,6 +65,7 @@ export async function toggleProductAvailability(id: string, currentValue: boolea
 }
 
 export async function deleteProduct(id: string) {
+  await requireAdmin()
   const supabase = createAdminClient()
   const { error } = await supabase.from('products').delete().eq('id', id)
   if (error) throw new Error(error.message)

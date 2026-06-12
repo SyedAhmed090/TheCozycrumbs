@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 
 export const metadata: Metadata = { title: 'Reviews' }
 
 async function approveTestimonial(id: string) {
   'use server'
+  await requireAdmin()
   const supabase = createAdminClient()
   await supabase.from('testimonials').update({ is_pending: false }).eq('id', id)
   revalidatePath('/admin/testimonials')
@@ -13,6 +15,7 @@ async function approveTestimonial(id: string) {
 
 async function toggleFeatured(id: string, current: boolean) {
   'use server'
+  await requireAdmin()
   const supabase = createAdminClient()
   await supabase.from('testimonials').update({ is_featured: !current }).eq('id', id)
   revalidatePath('/admin/testimonials')
@@ -20,6 +23,7 @@ async function toggleFeatured(id: string, current: boolean) {
 
 async function deleteTestimonial(id: string) {
   'use server'
+  await requireAdmin()
   const supabase = createAdminClient()
   await supabase.from('testimonials').delete().eq('id', id)
   revalidatePath('/admin/testimonials')

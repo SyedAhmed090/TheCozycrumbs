@@ -34,7 +34,8 @@ export default async function TrackOrderPage({
     status: string
     delivery_date: string
     created_at: string
-    subtotal: number
+    subtotal: number | null
+    discount_amount: number | null
     payment_method: string
     notes: string | null
     order_items: Array<{ product_name: string; quantity: number; price: number | null; variant: Record<string, string> }>
@@ -49,7 +50,7 @@ export default async function TrackOrderPage({
       const supabase = createAdminClient()
       let query = supabase
         .from('orders')
-        .select('id, customer_name, customer_phone, status, delivery_date, created_at, subtotal, payment_method, notes, order_items(product_name, quantity, price, variant)')
+        .select('id, customer_name, customer_phone, status, delivery_date, created_at, subtotal, discount_amount, payment_method, notes, order_items(product_name, quantity, price, variant)')
 
       if (id) {
         query = query.eq('id', id)
@@ -128,7 +129,9 @@ export default async function TrackOrderPage({
                   <p className="font-mono text-xs text-gray-400 mt-0.5">#{order.id.toUpperCase()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-inter text-sm font-semibold text-gray-900">Rs. {order.subtotal.toLocaleString()}</p>
+                  <p className="font-inter text-sm font-semibold text-gray-900">
+                    Rs. {((order.subtotal ?? 0) - (order.discount_amount ?? 0)).toLocaleString()}
+                  </p>
                   <p className="text-xs text-gray-400 capitalize">{order.payment_method === 'easypaisa' ? 'EasyPaisa' : 'Cash on Delivery'}</p>
                 </div>
               </div>

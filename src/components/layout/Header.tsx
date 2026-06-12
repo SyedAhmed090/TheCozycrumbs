@@ -18,8 +18,13 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  // Cart state comes from localStorage — render the badge only after mount so
+  // the first client render matches the server HTML (avoids hydration mismatch)
+  const [mounted, setMounted] = useState(false)
   const totalItems = useCartStore((s) => s.totalItems)
   const toggleDrawer = useCartStore((s) => s.toggleDrawer)
+
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -94,7 +99,7 @@ export default function Header() {
               className="relative w-[38px] h-[38px] flex items-center justify-center rounded-full hover:bg-beige transition-colors"
             >
               <ShoppingBag size={17} className="text-ink" />
-              {itemCount > 0 && (
+              {mounted && itemCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 flex items-center justify-center bg-terracotta text-white text-[9px] font-bold rounded-full">
                   {itemCount > 99 ? '99+' : itemCount}
                 </span>

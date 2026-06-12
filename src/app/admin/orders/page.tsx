@@ -140,7 +140,7 @@ export default async function AdminOrdersPage({
                       <p className="text-gray-400 text-xs">{order.customer_phone}</p>
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900">
-                      Rs. {order.subtotal.toLocaleString()}
+                      Rs. {(order.subtotal ?? 0).toLocaleString()}
                     </td>
                     <td className="px-4 py-3 capitalize text-gray-600">
                       {order.payment_method === 'cod' ? 'COD' : 'EasyPaisa'}

@@ -2,11 +2,13 @@
 
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 import { sendStatusUpdate } from '@/lib/email'
 
 const VALID_STATUSES = ['pending', 'confirmed', 'baking', 'out_for_delivery', 'delivered', 'cancelled']
 
 export async function updateOrderStatus(orderId: string, formData: FormData) {
+  await requireAdmin()
   const status = formData.get('status') as string
   if (!VALID_STATUSES.includes(status)) {
     throw new Error('Invalid status')
@@ -30,7 +32,8 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
 
   // Send status email if customer provided one and status is notable
   if (order?.customer_email && ['confirmed', 'baking', 'out_for_delivery', 'delivered', 'cancelled'].includes(status)) {
-    sendStatusUpdate({
+    // Must be awaited — serverless freezes the process once the action returns
+    await sendStatusUpdate({
       id: orderId,
       customerName: order.customer_name,
       customerEmail: order.customer_email,

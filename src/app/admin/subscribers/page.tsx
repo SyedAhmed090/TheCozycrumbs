@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 import { revalidatePath } from 'next/cache'
 
 export const metadata: Metadata = { title: 'Subscribers' }
 
 async function toggleSubscriber(id: string, currentValue: boolean) {
   'use server'
+  await requireAdmin()
   const supabase = createAdminClient()
   await supabase.from('newsletter_subscribers').update({ is_active: !currentValue }).eq('id', id)
   revalidatePath('/admin/subscribers')
@@ -13,6 +15,7 @@ async function toggleSubscriber(id: string, currentValue: boolean) {
 
 async function deleteSubscriber(id: string) {
   'use server'
+  await requireAdmin()
   const supabase = createAdminClient()
   await supabase.from('newsletter_subscribers').delete().eq('id', id)
   revalidatePath('/admin/subscribers')

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const EXT_BY_TYPE: Record<string, string> = {
+  'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif',
+}
+const ALLOWED_FOLDERS = ['products', 'references']
 const MAX_SIZE = 5 * 1024 * 1024
 
 export async function POST(req: NextRequest) {
@@ -19,8 +23,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Image must be under 5MB' }, { status: 400 })
     }
 
-    const ext = file.name.split('.').pop() ?? 'jpg'
-    const folder = (formData.get('folder') as string | null)?.trim()
+    // Extension from validated MIME type, folder from allowlist — never from user input
+    const ext = EXT_BY_TYPE[file.type] ?? 'jpg'
+    const folderRaw = (formData.get('folder') as string | null)?.trim()
+    const folder = folderRaw && ALLOWED_FOLDERS.includes(folderRaw) ? folderRaw : null
     const filename = folder
       ? `${folder}/${crypto.randomUUID()}.${ext}`
       : `${crypto.randomUUID()}.${ext}`

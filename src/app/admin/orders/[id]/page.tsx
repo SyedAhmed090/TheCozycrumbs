@@ -34,7 +34,9 @@ type Order = {
   delivery_date: string
   payment_method: string
   notes: string | null
-  subtotal: number
+  subtotal: number | null
+  discount_code: string | null
+  discount_amount: number | null
   status: string
   created_at: string
   order_items: OrderItem[]
@@ -144,11 +146,27 @@ export default async function AdminOrderDetailPage({
                 )
               })}
             </div>
-            <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-              <span className="font-inter font-semibold text-sm text-gray-700">Total</span>
-              <span className="font-inter font-bold text-base text-chocolate">
-                Rs. {order.subtotal.toLocaleString()}
-              </span>
+            <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-1.5">
+              {(order.discount_amount ?? 0) > 0 && (
+                <>
+                  <div className="flex justify-between items-center">
+                    <span className="font-inter text-sm text-gray-500">Subtotal</span>
+                    <span className="font-inter text-sm text-gray-700">Rs. {(order.subtotal ?? 0).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-inter text-sm text-green-600">
+                      Discount{order.discount_code ? ` (${order.discount_code})` : ''}
+                    </span>
+                    <span className="font-inter text-sm text-green-600">− Rs. {(order.discount_amount ?? 0).toLocaleString()}</span>
+                  </div>
+                </>
+              )}
+              <div className="flex justify-between items-center">
+                <span className="font-inter font-semibold text-sm text-gray-700">Total</span>
+                <span className="font-inter font-bold text-base text-chocolate">
+                  Rs. {((order.subtotal ?? 0) - (order.discount_amount ?? 0)).toLocaleString()}
+                </span>
+              </div>
             </div>
           </div>
         </div>

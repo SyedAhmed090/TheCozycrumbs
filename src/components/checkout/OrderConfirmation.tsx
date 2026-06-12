@@ -24,6 +24,7 @@ function formatDate(dateStr: string): string {
 
 export default function OrderConfirmation({ order }: OrderConfirmationProps) {
   const isEasypaisa = order.payment_method === 'easypaisa'
+  const amountDue = order.subtotal ? Number(order.subtotal) - Number(order.discount_amount ?? 0) : null
 
   const details = [
     { label: 'Delivery Date', value: formatDate(order.delivery_date) },
@@ -66,8 +67,8 @@ export default function OrderConfirmation({ order }: OrderConfirmationProps) {
           <p className="font-semibold text-ink mb-2">Complete Your Payment</p>
           <p className="text-sm text-ink leading-relaxed">
             Please send{' '}
-            {order.subtotal ? (
-              <strong>PKR {Number(order.subtotal).toLocaleString()}</strong>
+            {amountDue ? (
+              <strong>PKR {amountDue.toLocaleString()}</strong>
             ) : (
               'the confirmed amount'
             )}{' '}

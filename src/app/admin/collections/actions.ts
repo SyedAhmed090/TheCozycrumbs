@@ -3,8 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 
 export async function createCollection(formData: FormData) {
+  await requireAdmin()
   const supabase = createAdminClient()
 
   const title = ((formData.get('title') as string) ?? '').trim()
@@ -29,6 +31,7 @@ export async function createCollection(formData: FormData) {
 }
 
 export async function updateCollection(id: string, formData: FormData) {
+  await requireAdmin()
   const supabase = createAdminClient()
 
   const title = ((formData.get('title') as string) ?? '').trim()
@@ -53,6 +56,7 @@ export async function updateCollection(id: string, formData: FormData) {
 }
 
 export async function toggleCollection(id: string, currentValue: boolean) {
+  await requireAdmin()
   const supabase = createAdminClient()
   const { error } = await supabase
     .from('seasonal_collections')
@@ -63,6 +67,7 @@ export async function toggleCollection(id: string, currentValue: boolean) {
 }
 
 export async function deleteCollection(id: string) {
+  await requireAdmin()
   const supabase = createAdminClient()
   const { error } = await supabase.from('seasonal_collections').delete().eq('id', id)
   if (error) throw new Error(error.message)

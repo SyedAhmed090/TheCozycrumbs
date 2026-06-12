@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 
 const SEED_PRODUCTS = [
   // CAKES
@@ -36,6 +37,7 @@ const SEED_PRODUCTS = [
 ]
 
 export async function seedProducts() {
+  await requireAdmin()
   const supabase = createAdminClient()
 
   const { error } = await supabase
